@@ -1,0 +1,65 @@
+<h1 mat-dialog-title>Vendor</h1>
+<form [formGroup]="form" (ngSubmit)="onSubmit()" autocomplete="off">
+    <div mat-dialog-content>
+        <div fxFlex="100" class="px-2">
+            <div fxLayout="row wrap">
+                <div fxFlex="100" fxFlex.gt-sm="20" class="px-1">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>TIN No</mat-label>
+                        <input matInput formControlName="tinNo" required>
+                        <mat-error *ngIf="form.controls.tinNo.errors?.required">
+                            TinNo is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div fxFlex="100" fxFlex.gt-sm="30" class="px-1">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>Company Name</mat-label>
+                        <input matInput formControlName="companyName" required>
+                        <mat-error *ngIf="form.controls.companyName.errors?.required">
+                            Company Name is
+                            required
+                        </mat-error>
+                        <mat-error *ngIf="form.controls.companyName.hasError('minlength')">
+                            Company Name
+                            isn't long enough, minimum of 4 characters
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div fxFlex="100" fxFlex.gt-sm="20" class="px-1">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>Contact No</mat-label>
+                        <input matInput formControlName="phoneNo" required>
+                        <mat-error *ngIf="form.controls.phoneNo.errors?.required">
+                            Contact No is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div fxFlex="100" fxFlex.gt-sm="30" class="px-1">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>Email</mat-label>
+                        <input matInput formControlName="email" required>
+                        <mat-error *ngIf="form.controls.email.errors?.required">
+                            Email is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div fxFlex="100" fxFlex.gt-sm="100" class="px-1">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>Address</mat-label>
+                        <input matInput formControlName="address" required placeholder="Address (street, apartment, suite, unit etc.)">
+                        <mat-error *ngIf="form.controls.address.errors?.required">
+                            Address No is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div mat-dialog-actions>
+        <div fxLayout="row" fxLayoutAlign="space-between center" class="w-100">
+            <button mat-raised-button color="warn" type="button" mat-dialog-close>Close</button>
+            <button mat-raised-button color="primary" type="submit">Save</button>
+        </div>
+    </div>
+</form>

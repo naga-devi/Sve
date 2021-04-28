@@ -1,0 +1,232 @@
+<div class="p-1">
+    <mat-card>
+        <!-- <mat-card-header>
+            <mat-card-title>{{(productId) ? 'Edit' : 'Add New'}} Purchases</mat-card-title>
+        </mat-card-header> -->
+        <div fxLayout="row wrap" fxLayoutAlign="space-between center" class="w-100 p-2">
+            <h2>{{(productId) ? 'Edit' : 'Add New'}} Purchases</h2>
+            <!-- <button mat-raised-button color="primary" (click)="openCustomerDialog(null)">Add Orders</button> -->
+            <a [routerLink]="['/admin/purchases/orders']" mat-raised-button color="warn">Back to orders
+            </a>
+        </div>
+        <mat-card-content>
+            <div fxLayout="row wrap">
+                <form [formGroup]="form" (ngSubmit)="onSubmit()" autocomplete="off">
+                    <div fxFlex="100" class="px-2">
+                        <div fxLayout="row wrap">
+                            <div fxFlex="100" fxFlex.gt-sm="20" class="px-1">
+                                <mat-form-field appearance="outline" class="w-100">
+                                    <mat-label>TIN No</mat-label>
+                                    <input matInput formControlName="tinNo" (change)="getVendorByTinNo()" required>
+                                    <mat-error *ngIf="form.controls.tinNo.errors?.required">
+                                        TinNo is required
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div fxFlex="100" fxFlex.gt-sm="30" class="px-1">
+                                <mat-form-field appearance="outline" class="w-100">
+                                    <mat-label>Company Name</mat-label>
+                                    <input matInput formControlName="companyName" required>
+                                    <mat-error *ngIf="form.controls.companyName.errors?.required">
+                                        Company Name is
+                                        required
+                                    </mat-error>
+                                    <mat-error *ngIf="form.controls.companyName.hasError('minlength')">
+                                        Company Name
+                                        isn't long enough, minimum of 4 characters
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div fxFlex="100" fxFlex.gt-sm="20" class="px-1">
+                                <mat-form-field appearance="outline" class="w-100">
+                                    <mat-label>Contact No</mat-label>
+                                    <input matInput formControlName="phoneNo" (change)="getVendorByPhone()" required>
+                                    <mat-error *ngIf="form.controls.phoneNo.errors?.required">
+                                        Contact No is required
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div fxFlex="100" fxFlex.gt-sm="30" class="px-1">
+                                <mat-form-field appearance="outline" class="w-100">
+                                    <mat-label>Email</mat-label>
+                                    <input matInput formControlName="email" required>
+                                    <mat-error *ngIf="form.controls.email.errors?.required">
+                                        Email is required
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div fxFlex="100" fxFlex.gt-sm="100" class="px-1">
+                                <mat-form-field appearance="outline" class="w-100">
+                                    <mat-label>Address</mat-label>
+                                    <input matInput formControlName="address" required placeholder="Address (street, apartment, suite, unit etc.)">
+                                    <mat-error *ngIf="form.controls.address.errors?.required">
+                                        Address No is required
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div fxFlex="100" fxFlex.gt-sm="33.3" class="px-1">
+                                <mat-form-field appearance="outline" class="w-100">
+                                    <mat-label>Invoice#</mat-label>
+                                    <input matInput formControlName="invoiceNo" required>
+                                    <mat-error *ngIf="form.controls.invoiceNo.errors?.required">
+                                        Invoice No is required
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div fxFlex="100" fxFlex.gt-sm="33.3" class="px-1">
+                                <mat-form-field appearance="outline" class="w-100">
+                                    <mat-label>Purchase date</mat-label>
+                                    <input matInput [matDatepicker]="purchaseDate" readonly placeholder="Purchase Date" formControlName="purchaseDate">
+                                    <mat-datepicker-toggle matSuffix [for]="purchaseDate"></mat-datepicker-toggle>
+                                    <mat-datepicker #purchaseDate></mat-datepicker>
+                                    <mat-error *ngIf="form.controls.purchaseDate.errors?.required">
+                                        Purchase date is
+                                        required
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div fxFlex="100" fxFlex.gt-sm="33.3" class="px-1">
+                                <mat-form-field appearance="outline" class="w-100">
+                                    <mat-label>Total</mat-label>
+                                    <input type="number" matInput formControlName="totalAmount" required readonly>
+                                    <mat-error *ngIf="form.controls.totalAmount.errors?.required">
+                                        Total is required
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div fxFlex="100" fxFlex.gt-sm="25" class="px-1">
+                                <mat-form-field appearance="outline" class="w-100">
+                                    <mat-label>Discount</mat-label>
+                                    <input type="number" (keyup)="setNetAmount()" matInput formControlName="discount">
+                                </mat-form-field>
+                            </div>
+                            <div fxFlex="100" fxFlex.gt-sm="25" class="px-1">
+                                <mat-form-field appearance="outline" class="w-100">
+                                    <mat-label>Net Amount</mat-label>
+                                    <input type="number" readonly matInput formControlName="netAmount" required>
+                                    <mat-error *ngIf="form.controls.netAmount.errors?.required">
+                                        NetAmount is required
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div fxFlex="100" fxFlex.gt-sm="25" class="px-1">
+                                <mat-form-field appearance="outline" class="w-100">
+                                    <mat-label>CGST(9%)</mat-label>
+                                    <input type="number" matInput formControlName="cgstAmount" readonly>
+                                </mat-form-field>
+                            </div>
+                            <div fxFlex="100" fxFlex.gt-sm="25" class="px-1">
+                                <mat-form-field appearance="outline" class="w-100">
+                                    <mat-label>SGST(9%)</mat-label>
+                                    <input type="number" matInput formControlName="sgstAmount" readonly>
+                                </mat-form-field>
+                            </div>
+                            <div fxFlex="100" fxFlex.gt-sm="25" class="px-1">
+                                <mat-form-field appearance="outline" class="w-100">
+                                    <mat-label>Grand Total</mat-label>
+                                    <input type="number" matInput formControlName="grandTotal" (keyup)="updateRoundOff()">
+                                    <mat-error *ngIf="form.controls.grandTotal.errors?.required">
+                                        Grand Total is required
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div fxFlex="100" fxFlex.gt-sm="25" class="px-1">
+                                <mat-form-field appearance="outline" class="w-100">
+                                    <mat-label>Round Off</mat-label>
+                                    <input type="number" matInput formControlName="roundOffAmount" readonly>
+                                </mat-form-field>
+                            </div>                            
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </mat-card-content>
+        <div fxLayout="row wrap" fxLayoutAlign="space-between center" class="w-100 p-2">
+            <h2>Purchased Product List</h2>
+            <button mat-raised-button color="primary" (click)="openAddItemDialog(null, -1, true)">Add Purchase Item</button>
+        </div>
+        <mat-divider></mat-divider>
+        <mat-card-content>
+            <div class="mat-table admin-table">
+                <div class="mat-header-row">
+                    <div class="mat-header-cell">Product</div>
+                    <div class="mat-header-cell">Category</div>
+                    <div class="mat-header-cell">Material</div>
+                    <div class="mat-header-cell">Size</div>
+                    <div class="mat-header-cell">Brand</div>
+                    <div class="mat-header-cell">Grade</div>
+                    <div class="mat-header-cell">Color</div>
+                    <div class="mat-header-cell">UM</div>
+                    <div class="mat-header-cell">Quantity</div>
+                    <div class="mat-header-cell">MRP</div>
+                    <div class="mat-header-cell">UnitPrice</div>
+                    <div class="mat-header-cell">CGST</div>
+                    <div class="mat-header-cell">SGST</div>
+                    <div class="mat-header-cell">Taxable Amount</div>
+                    <div class="mat-header-cell">Actions</div>
+                </div>
+                <div *ngFor="let item of purchases; let rowIndex = index" class="mat-row">
+                    <div class="mat-cell">{{ ( products | filterById : item.productId: 'productId')?.name }}</div>
+                    <div class="mat-cell">{{ ( prerequisites?.categories | filterById : item.categoryId)?.name }}</div>
+                    <div class="mat-cell">{{ ( prerequisites?.materialTypes | filterById : item.materialTypeId: 'materialTypeId')?.name }}</div>
+                    <div class="mat-cell">{{ ( prerequisites?.sizes | filterById : item.sizeId: 'sizeId')?.name }}</div>
+                    <div class="mat-cell">{{ ( prerequisites?.brands | filterById : item.brandId: 'brandId')?.name }}</div>
+                    <div class="mat-cell">{{ ( prerequisites?.grades | filterById : item.gradeId: 'gradeId')?.name }}</div>
+                    <div class="mat-cell">{{ ( prerequisites?.colors | filterById : item.colorId: 'colorId')?.name }}</div>
+                    <div class="mat-cell">{{ ( unitmeasures | filterById : item.unitMeasureId: 'unitMeasureId')?.name }}</div>
+                    <div class="mat-cell">{{item.quanitity}}</div>
+                    <div class="mat-cell">{{item.mrp}}</div>
+                    <div class="mat-cell">{{item.unitPrice}}</div>
+                    <div class="mat-cell">{{item.totalCgstAmount}}</div>
+                    <div class="mat-cell">{{item.totalSgstAmount}}</div>
+                    <div class="mat-cell">{{item.taxableAmount}}</div>
+                    <!--<div class="mat-cell">{{item.unitPrice*item.quanitity | number : '1.2-2'}}</div>-->
+                    <div class="mat-cell">
+                        <div class="p-1 actions">
+                            <!-- <button mat-mini-fab color="primary" matTooltip="Edit" (click)="openAddItemDialog(item, rowIndex, true)">
+                                <mat-icon>edit</mat-icon>
+                            </button> -->
+                            <button mat-icon-button [matMenuTriggerFor]="menu" matTooltip="More actions">
+                                <mat-icon>more_vert</mat-icon>
+                            </button>
+                            <mat-menu #menu="matMenu">
+                                <button mat-menu-item type="button" (click)="openAddItemDialog(item, rowIndex, false)">
+                                    <mat-icon>edit</mat-icon>
+                                    <span>Edit</span>
+                                </button>
+                                <button mat-menu-item type="button" (click)="remove(item, rowIndex)">
+                                    <mat-icon>delete</mat-icon>
+                                    <span>Delete</span>
+                                </button>
+                                <button mat-menu-item type="button" (click)="copyPurchaseItem(item, rowIndex)">
+                                    <mat-icon>content_copy</mat-icon>
+                                    <span>Copy</span>
+                                </button>
+                            </mat-menu>
+                        </div>
+                    </div>
+                    <!-- <div class="mat-cell">
+                        <div class="p-1 actions">
+                            <button mat-mini-fab color="warn" matTooltip="Delete" class="mx-1" (click)="remove(item, rowIndex)">
+                                <mat-icon>delete</mat-icon>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="mat-cell">
+                        <div class="p-1 actions">
+                            <button mat-mini-fab color="warn" matTooltip="Copy entry" class="mx-1" (click)="copyPurchaseItem(item, rowIndex)">
+                                <mat-icon>content_copy</mat-icon>
+                            </button>
+                        </div>
+                    </div> -->
+                </div>
+            </div>
+            <div class="table-empty-row" *ngIf="purchases && purchases.length === 0 ">No records found</div>
+        </mat-card-content>
+        <mat-card-content *ngIf="purchases.length > 0 && form.valid">
+            <div fxFlex="100" class="mt-2 text-center w-100">
+                <button mat-raised-button color="primary" (click)="onSubmit()" type="submit">Confirm</button>
+            </div>
+        </mat-card-content>
+    </mat-card>
+</div>

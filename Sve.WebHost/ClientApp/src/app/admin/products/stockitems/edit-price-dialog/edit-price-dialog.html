@@ -1,0 +1,51 @@
+<h1 mat-dialog-title>Update Price Details</h1>
+<form [formGroup]="form" (ngSubmit)="onSubmit()" autocomplete="off">
+    <div mat-dialog-content>
+        <div fxLayout="row wrap">
+            <div fxFlex="100" class="px-1" fxFlex.gt-sm="33.3">
+                <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Old Price</mat-label>
+                    <input matInput formControlName="oldPrice" type="number" readonly>
+                </mat-form-field>
+            </div>
+            <div fxFlex="100" class="px-1" fxFlex.gt-sm="33.3">
+                <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>MRP</mat-label>
+                    <input matInput formControlName="mrp" type="number" (keyup)="updatePrice()">
+                    <mat-error *ngIf="form.controls.mrp.errors?.required">MRP price is required</mat-error>
+                </mat-form-field>
+            </div>
+            <div fxFlex="100" class="px-1" fxFlex.gt-sm="33.3">
+                <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Discount(%)</mat-label>
+                    <input matInput formControlName="discount" type="number" (keyup)="updatePrice()">
+                </mat-form-field>
+            </div>
+            <div fxFlex="100" class="px-1" fxFlex.gt-sm="33.3">
+                <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>New Net Price</mat-label>
+                    <input matInput formControlName="netPrice" readonly required type="number">
+                    <mat-error *ngIf="form.controls.netPrice.errors?.required">Net price is required</mat-error>
+                </mat-form-field>
+            </div>
+            <div fxFlex="100" class="px-1" fxFlex.gt-sm="33.3">
+                <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Tax Amount(CGST+SGST)</mat-label>
+                    <input matInput formControlName="taxAmount" type="number" readonly>
+                </mat-form-field>
+            </div>
+            <div fxFlex="100" class="px-1" fxFlex.gt-sm="33.3">
+                <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Sell Price</mat-label>
+                    <input matInput formControlName="sellPrice" type="number" readonly>
+                </mat-form-field>
+            </div>
+        </div>
+    </div>
+    <div mat-dialog-actions>
+        <div fxLayout="row" fxLayoutAlign="space-between center" class="w-100">
+            <button mat-raised-button color="warn" type="button" mat-dialog-close>Close</button>
+            <button mat-raised-button color="primary" type="submit">Save</button>
+        </div>
+    </div>
+</form>

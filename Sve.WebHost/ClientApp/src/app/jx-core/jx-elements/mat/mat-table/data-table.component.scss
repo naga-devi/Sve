@@ -1,0 +1,31 @@
+.kt-export-header .btn {
+    display: inline-flex;
+    height: 32px !important;
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-top: 0.25rem;
+    margin-bottom: 0.25rem;
+}
+.kt-export-header .kt-subheader__btn-primary {
+    background: #f2f3f7;
+    color: #959cb6;
+    font-weight: 500;
+}
+
+.kt-export-header .kt-subheader__btn-primary:hover {
+    background: #007bff;
+    color: #ffffff;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.kt-export-header .kt-subheader__toolbar .btn:not(.dropdown-toggle-split) {
+    margin-left: 0.25rem;
+}
+
+.kt-export-header .btn:not(.dropdown-toggle-split) {
+    margin-left: 0.5rem;
+}
+.kt-export-header .btn.btn-icon {
+    width: 75px !important;
+}

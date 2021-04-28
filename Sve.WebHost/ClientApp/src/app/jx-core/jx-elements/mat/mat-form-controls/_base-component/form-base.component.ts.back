@@ -1,0 +1,85 @@
+import { Directive, Input } from "@angular/core";
+import { FormGroup } from "@angular/forms";
+import { JxBaseComponent } from "../../../_base/base.component";
+
+@Directive() // Needed only for Angular v9+ strict mode that enforce decorator to enable Component inheritance
+export abstract class JxFormBaseComponent extends JxBaseComponent {
+	public parentGroup: FormGroup;
+    formErrors: any;
+    validationMessage: any;
+
+    buildForms() {
+        this.parentGroup.valueChanges.subscribe(data => {
+            this.onValueChange();
+        });
+    }
+
+    onValueChange() {
+        const form = this.parentGroup;
+        for(const field in this.formErrors){
+            /* Initialize form's Errors */
+            this.formErrors[field] = '';
+            const control = form.get(field);
+            if (control && control.dirty && !control.valid) {
+                const messages = this.validationMessage[field];
+                for (const key in control.errors){
+                    this.formErrors[field] += messages[key];
+                }
+                this.emitErrorAction();
+            }
+            if (control && control.dirty && control.valid) {
+                this.emitNotErrorAction();
+            }
+        }
+    }
+
+    emitErrorAction() {
+        
+    }
+
+    emitNotErrorAction(){
+        
+    }
+    canDeActivateInputPage(): boolean {
+        return confirm("canDeActivateInputPage");
+    }
+    
+    allControlReCheck() {
+        for (const field in this.formErrors) {
+            const control = this.parentGroup.controls[field];
+            control.markAsDirty();
+            this.onValueChange();
+        }
+    }
+}
+
+/**
+ export class ReactiveFormOne extends BaseComponent implements OnInit {
+    
+    formErrors = validSettings.FORM_ERRORS;
+    validationMessage = validSettings.VALIDATION_MESSAGES;
+
+    constructor(
+        private _fb: FormBuilder
+    ){
+        super();
+    }
+
+    ngOnInit(){
+        this.buildForms();
+    }
+
+    buildForms() {
+        this.inputForm = this._fb.group(validSettings.FORM_SETTING);
+        super.buildForms();
+    }
+    onSubmit() {
+        this.allControlReCheck();
+        if (this.inputForm.invalid) {
+            alert('えらーあるよ！')
+        } else {
+            this._router.navigate(["empty"]);
+        }
+    }
+}
+ */

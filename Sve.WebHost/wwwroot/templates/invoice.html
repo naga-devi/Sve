@@ -1,0 +1,220 @@
+﻿<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>::S.V. Enpterprises:: Invoice</title>
+    <style type="text/css">
+        .invoice-box {
+            max-width: 800px;
+            margin: auto;
+            padding: 5px;
+            font-size: 16px;
+            line-height: 24px;
+            font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif;
+            color: #555;
+        }
+
+            .invoice-box table {
+                width: 100%;
+                line-height: inherit;
+                text-align: left;
+            }
+
+        .tg {
+            border-collapse: collapse;
+            border-spacing: 0;
+        }
+
+            .tg td {
+                border-color: black;
+                border-style: solid;
+                border-width: 1px;
+                font-family: Arial, sans-serif;
+                font-size: 14px;
+                overflow: hidden;
+                padding: 10px 5px;
+                word-break: normal;
+            }
+
+            .tg th {
+                border-color: black;
+                border-style: solid;
+                border-width: 1px;
+                font-family: Arial, sans-serif;
+                font-size: 14px;
+                font-weight: normal;
+                overflow: hidden;
+                padding: 10px 5px;
+                word-break: normal;
+            }
+
+            .tg .tg-baqh {
+                text-align: center;
+                vertical-align: top
+            }
+
+            .tg .tg-c3ow {
+                border-color: inherit;
+                text-align: center;
+                vertical-align: top
+            }
+
+            .tg .tg-0p48 {
+                border-color: inherit;
+                font-size: 11px;
+                font-weight: bold;
+                text-align: left;
+                vertical-align: top;
+                padding: 0px 5px;
+                border-bottom-color: #fff;
+            }
+
+            .tg .tg-2xbj {
+                border-color: inherit;
+                font-size: 18px;
+                font-weight: bold;
+                text-align: center;
+                vertical-align: top;
+                border-bottom-color: #fff;
+            }
+
+            .tg .tg-7btt {
+                border-color: inherit;
+                font-weight: bold;
+                text-align: center;
+                vertical-align: top
+            }
+
+            .tg .tg-0pky {
+                border-color: inherit;
+                text-align: left;
+                vertical-align: top
+            }
+
+            .tg .tg-0lax {
+                text-align: left;
+                vertical-align: top
+            }
+
+            .tg .tg-amwm {
+                font-weight: bold;
+                text-align: center;
+                vertical-align: top;
+                border-bottom-color: #fff;
+            }
+
+        .font-size-12 {
+            font-size: 12px !important;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="invoice-box">
+        <table class="tg">
+            <thead>
+                <tr>
+                    <th class="tg-0p48" colspan="7">GSTNO: 37AZDM522T1Z3</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="tg-2xbj" colspan="7">S.V. Enterprises</td>
+                </tr>
+                <tr>
+                    <td class="tg-c3ow" colspan="7" rowspan="2">Sy. No. 160. Jonnawada Road. Pottepalem Village - 524001, Nellore(Mandal & Dist) A.P. <br />Cell: +91 9010001333, +91 9505556159 Email: sv12enterprises@gmail.com</td>
+                </tr>
+                <tr></tr>
+                <tr>
+                    <td class="tg-7btt" colspan="7">Tax Invoice</td>
+                </tr>
+                <tr>
+                    <td class="tg-0pky" colspan="4">Name: {{ConsumerName}}</td>
+                    <td class="tg-0pky">Invoice No</td>
+                    <td class="tg-0pky" colspan="2">{{InvoiceNo}}</td>
+                </tr>
+                <tr>
+                    <td class="tg-0pky" colspan="4" rowspan="2">Address: {{Address}}</td>
+                    <td class="tg-0pky">Invoice Date</td>
+                    <td class="tg-0pky" colspan="2">{{InvoiceDate}}</td>
+                </tr>
+                <tr>
+                    <td class="tg-0pky">Transport Name</td>
+                    <td class="tg-0pky" colspan="2">{{TransportName}}</td>
+                </tr>
+                <tr>
+                    <td class="tg-0pky" colspan="4">GSTIN: {{GSTIN}}</td>
+                    <td class="tg-0pky">Vehicle No</td>
+                    <td class="tg-0pky" colspan="2">{{VehicleNo}}</td>
+                </tr>
+                <tr>
+                    <td class="tg-0pky" colspan="4">Cell No: {{CellNo}}</td>
+                    <td class="tg-0pky">Place Of Supply</td>
+                    <td class="tg-0pky" colspan="2">{{PlaceOfSupply}}</td>
+                </tr>
+                <tr>
+                    <td class="tg-0pky">S.No.</td>
+                    <td class="tg-0pky">HSN Code</td>
+                    <td class="tg-0pky">Size</td>
+                    <td class="tg-0pky">Product Description</td>
+                    <td class="tg-0pky">Qty</td>
+                    <td class="tg-0pky">Rate</td>
+                    <td class="tg-0pky">Amount</td>
+                </tr>
+                <!--<tr>
+                    <td class="tg-0pky"></td>
+                    <td class="tg-0pky"></td>
+                    <td class="tg-0pky"></td>
+                    <td class="tg-0pky"></td>
+                    <td class="tg-0pky"></td>
+                    <td class="tg-0pky"></td>
+                    <td class="tg-0pky"></td>
+                </tr>-->
+                {{producItemsRow}}
+                <tr>
+                    <td class="tg-0pky" colspan="4" rowspan="6">Rupees in words: {{Rupeesinwords}}</td>
+                    <td class="tg-0pky">Total Amount Before Tax</td>
+                    <td class="tg-0pky" colspan="2">{{TotalAmountBeforeTax}}</td>
+                </tr>
+                <tr>
+                    <td class="tg-0pky">Add. CGST(14%)</td>
+                    <td class="tg-0pky" colspan="2">{{AddCGST}}</td>
+                </tr>
+                <tr>
+                    <td class="tg-0lax">Add. SGST(14%)</td>
+                    <td class="tg-0lax" colspan="2">{{AddSGST}}</td>
+                </tr>
+                <tr>
+                    <td class="tg-0lax">Transport</td>
+                    <td class="tg-0lax" colspan="2">{{AddTransport}}</td>
+                </tr>
+                <tr>
+                    <td class="tg-0lax">Discount(%)</td>
+                    <td class="tg-0lax" colspan="2">{{Discount}}</td>
+                </tr>
+                <tr>
+                    <td class="tg-0lax">Total Amount After Tax</td>
+                    <td class="tg-0lax" colspan="2">{{TotalAmountAfterTax}}</td>
+                </tr>
+                <tr>
+                    <td class="tg-0lax font-size-12" colspan="2" rowspan="4">
+                        Terms &amp; Conditions:<br />*Goods once sold cannot be taken back<br />*Our responsibility ceases on delivery at godown<br />*All disputes are Nellore Jurisdiction only
+
+                    </td>
+                    <td class="tg-0lax font-size-12" colspan="2" rowspan="4">Bank : HDFC Bank, Nellore<br />Bank A/c. : 50200022855781<br />Bank IFSC : HDFC0002578</td>
+                    <td class="tg-0lax font-size-12" style="border-bottom-color: #fff;" colspan="3"></td>
+                </tr>
+                <tr>
+                    <td class="tg-amwm" colspan="3">For S.V. ENTERPRISES</td>
+                </tr>
+                <tr>
+                    <td class="tg-0lax" style="border-bottom-color: #fff;" colspan="3"></td>
+                </tr>
+                <tr>
+                    <td class="tg-baqh" colspan="3">AUTHORISED SIGNATURE</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

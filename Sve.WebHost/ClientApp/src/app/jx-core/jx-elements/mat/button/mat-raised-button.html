@@ -1,0 +1,7 @@
+<button (click)="onClick.emit()" [matTooltip]="tooltip" [disabled]="disabled" mat-raised-button color="{{color}}" [ngClass]="{'kt-spinner kt-spinner--right kt-spinner--md kt-spinner--light': loading, 'w-100 filter-button': isFilterButton}" 
+class="btn btn-primary btn-elevate kt-login__btn-primary">
+<ng-container *ngIf="!loading; else isLoading">{{title}}</ng-container>
+              <ng-template #isLoading>
+                {{title}}...
+              </ng-template>
+</button>

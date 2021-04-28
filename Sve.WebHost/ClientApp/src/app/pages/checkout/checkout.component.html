@@ -1,0 +1,90 @@
+﻿<mat-horizontal-stepper #horizontalStepper linear="true" class="mat-elevation-z2" fxShow="false" fxShow.gt-sm>
+    <mat-step label="Review Order">
+        <div fxLayout="row wrap">
+            <div fxFlex="100" class="p-1">
+                <h3 class="text-muted">Shopping Cart</h3>
+                <div class="divider"></div>
+                <div class="mat-table review-order-table">
+                    <div class="mat-header-row">
+                        <div class="mat-header-cell">Product</div>
+                        <div class="mat-header-cell">Category</div>
+                        <div class="mat-header-cell">Name</div>
+                        <div class="mat-header-cell">Unit Price</div>
+                        <div class="mat-header-cell">Quantity</div>
+                        <div class="mat-header-cell">Total</div>
+                    </div>
+                    <div *ngFor="let product of appService.Data.cartList" class="mat-row">
+                        <div class="mat-cell"><img [src]="product.imagePath"></div>
+                        <div class="mat-cell">{{( appService.Data?.categories | filterById : product.categoryId )?.name}}</div>
+                        <div class="mat-cell">{{getProductTitle(product)}}</div>
+                        <div class="mat-cell">₹{{product.newPrice | number : '1.2-2'}}</div>
+                        <div class="mat-cell text-muted"> {{product.cartCount}} </div>
+                        <div class="mat-cell">₹{{ (product.newPrice*product.cartCount) | number : '1.2-2'}}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div fxLayout="row" fxLayoutAlign="center center" class="p-1">
+            <h2><span class="text-muted mr-1">Total Price:</span><span>₹{{grandTotal | number : '1.2-2'}}</span></h2>
+        </div>
+        <div fxLayout="row" fxLayoutAlign="center center" class="mt-2 p-1">
+            <button mat-raised-button matStepperNext color="primary" (click)="placeOrder()">Place order now</button>
+        </div>
+    </mat-step>
+    <mat-step label="Confirmation">
+        <div fxLayout="column" fxLayoutAlign="center center" class="p-2 text-center">
+            <button mat-fab color="primary"><mat-icon>check</mat-icon></button>
+            <h2 class="py-2">{{checkoutStatusText}}</h2>
+            <p *ngIf="orderId && orderId> 0" class="text-muted">Please contact billing section with orderid #(<strong>{{orderId}}</strong>)</p>
+        </div>
+        <div fxLayout="row" fxLayoutAlign="center center" class="mt-2 p-1">
+            <button mat-mini-fab matStepperPrevious color="primary" *ngIf="showBackButton" matTooltip="Back" matTooltipPosition="before" class="mr-1"><mat-icon>navigate_before</mat-icon></button>
+            <a [routerLink]="['/']" mat-raised-button color="primary">Return to Shop</a>
+        </div>
+
+    </mat-step>
+</mat-horizontal-stepper>
+
+<mat-vertical-stepper #verticalStepper linear="true" class="mat-elevation-z2" fxHide="false" fxHide.gt-sm>
+    <mat-step label="Review Order">
+        <div fxLayout="row wrap">
+            <div fxFlex="100" class="p-1">
+                <h3 class="text-muted">Shopping Cart</h3>
+                <div class="divider"></div>
+                <div class="mat-table review-order-table">
+                    <div class="mat-header-row">
+                        <div class="mat-header-cell">Product</div>
+                        <div class="mat-header-cell">Name</div>
+                        <div class="mat-header-cell">Unit Price</div>
+                        <div class="mat-header-cell">Quantity</div>
+                        <div class="mat-header-cell">Total</div>
+                    </div>
+                    <div *ngFor="let product of appService.Data.cartList" class="mat-row">
+                        <div class="mat-cell"><img [src]="product.imagePath"></div>
+                        <div class="mat-cell">{{product.name}}</div>
+                        <div class="mat-cell">₹{{product.newPrice | number : '1.2-2'}}</div>
+                        <div class="mat-cell text-muted"> 1 </div>
+                        <div class="mat-cell">₹{{product.newPrice | number : '1.2-2'}}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div fxLayout="row" fxLayoutAlign="center center" class="p-1">
+            <h2><span class="text-muted mr-1">Total Price:</span><span>₹{{grandTotal | number : '1.2-2'}}</span></h2>
+        </div>
+        <div fxLayout="row" fxLayoutAlign="center center" class="mt-2 p-1">
+            <button mat-raised-button matStepperNext color="primary" (click)="placeOrder()">Place order now</button>
+        </div>
+    </mat-step>
+    <mat-step label="Confirmation">
+        <div fxLayout="column" fxLayoutAlign="center center" class="p-2 text-center">
+            <button mat-fab color="primary"><mat-icon>check</mat-icon></button>
+            <h2 class="py-2">{{checkoutStatusText}}</h2>
+            <p *ngIf="orderId && orderId> 0" class="text-muted">Please contact billing section with orderid #(<strong>{{orderId}}</strong>)</p>
+        </div>
+        <div fxLayout="row" fxLayoutAlign="center center" class="mt-2 p-1">
+            <button mat-mini-fab matStepperPrevious color="primary" *ngIf="showBackButton" matTooltip="Back" matTooltipPosition="before" class="mr-1"><mat-icon>expand_less</mat-icon></button>
+            <a [routerLink]="['/']" mat-raised-button color="primary">Return to Shop</a>
+        </div>
+    </mat-step>
+</mat-vertical-stepper>

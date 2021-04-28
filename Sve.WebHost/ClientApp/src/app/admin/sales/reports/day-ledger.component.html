@@ -1,0 +1,62 @@
+<div fxLayout="row wrap">
+    <mat-card class="p-0">
+        <mat-card-content>
+            <form [formGroup]="form" (ngSubmit)="onDateChange()" autocomplete="off">
+                <div fxFlex="100" fxFlex.gt-sm="60" class="p-1">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>Report date</mat-label>
+                        <input matInput [matDatepicker]="reportDate" readonly placeholder="Purchase Date"
+                            formControlName="reportDate">
+                        <mat-datepicker-toggle matSuffix [for]="reportDate"></mat-datepicker-toggle>
+                        <mat-datepicker #reportDate></mat-datepicker>
+                        <mat-error *ngIf="form.controls.reportDate.errors?.required">Report date is required</mat-error>
+                    </mat-form-field>
+                </div>
+                <div fxFlex="100" fxFlex.gt-sm="20" class="p-1">
+                    <button mat-raised-button class="margin-top-10" color="primary" type="button" type="submit"
+                        aria-label="Save name">
+                        SUBMIT
+                    </button>
+                </div>
+            </form>
+        </mat-card-content>
+    </mat-card>
+</div>
+<div fxLayout="row wrap">
+    <div fxFlex="100" fxFlex.gt-sm="100" class="p-1">
+        <mat-card class="p-0">
+            <div fxLayout="row wrap" fxLayoutAlign="space-between center" class="w-100 p-2">
+                <h2>Day Summary</h2>  
+            </div>
+            <mat-divider></mat-divider>
+            <div class="mat-table admin-table">
+                <div class="mat-header-row">
+                    <div class="mat-header-cell">Paymode</div>
+                    <div class="mat-header-cell">Total Quantity</div>
+                    <div class="mat-header-cell">Total Amount</div>
+                    <div class="mat-header-cell">Discount</div>
+                    <div class="mat-header-cell">NetAmount</div>
+                    <div class="mat-header-cell">RoundOff</div>
+                    <div class="mat-header-cell">Grand Total</div>
+                    <div class="mat-header-cell">Paid Amount</div>
+                    <div class="mat-header-cell">Balance Amount</div>
+                </div>
+                <div *ngFor="let item of data" class="mat-row">
+                    <div class="mat-cell">{{item.paymodeText}}</div>
+                    <div class="mat-cell">{{item.totalQuantity}}</div>
+                    <div class="mat-cell">{{item.totalAmount}}</div>
+                    <div class="mat-cell">{{item.discountAmount}}</div>
+                    <div class="mat-cell">{{item.netAmount}}</div>
+                    <div class="mat-cell">{{item.roundOffAmount}}</div>
+                    <div class="mat-cell">{{item.grandTotal}}</div>
+                    <div class="mat-cell">{{item.paidAmount}}</div>
+                    <div class="mat-cell">{{item.balanceAmount}}</div>
+                </div>
+            </div>
+        </mat-card>
+    </div>
+    <mat-divider></mat-divider>
+    <div fxFlex="100" fxFlex.gt-sm="100" class="p-1">
+        <app-sales-day-ledger [legendTitle]="'Pay Modes'" [data]="chartData"></app-sales-day-ledger>
+    </div>
+</div>

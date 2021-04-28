@@ -1,0 +1,68 @@
+﻿<div class="p-1">
+    <mat-dialog-content>
+        <mat-card>
+            <div fxLayout="row wrap" fxLayoutAlign="space-between center" class="w-100 p-2">
+                <h2>{{data.order.companyName}} Purchase Order</h2>
+                <button mat-raised-button color="warn" type="button" mat-dialog-close>Close</button>
+            </div>
+            <mat-divider></mat-divider>
+            <mat-card-content>
+                <div class="mat-table admin-table">
+                    <div class="mat-header-row">
+                        <div class="mat-header-cell">Invoice#</div>
+                        <div class="mat-header-cell">Company Name</div>
+                        <div class="mat-header-cell">Contact No.</div>
+                        <div class="mat-header-cell">Purchase Date</div>
+                        <div class="mat-header-cell">Total</div>
+                    </div>
+                    <div class="mat-row">
+                        <div class="mat-cell"><span class="order">#{{data.order.invoiceNo}}</span></div>
+                        <div class="mat-cell">{{data.order?.companyName}}</div>
+                        <div class="mat-cell">{{data.order?.phoneNo}}</div>
+                        <div class="mat-cell">{{data.order.purchaseDate}}</div>
+                        <div class="mat-cell"><strong>₹{{data.order.grandTotal}}</strong> for
+                            <strong>{{data.order.quantity}}</strong> items</div>
+                    </div>
+                </div>
+            </mat-card-content>
+            <div fxLayout="row wrap" fxLayoutAlign="space-between center" class="w-100 p-2">
+                <h2>Purchased Items</h2>
+            </div>
+            <mat-divider></mat-divider>
+            <mat-card-content>
+                <div class="mat-table admin-table">
+                    <div class="mat-header-row">
+                        <div class="mat-header-cell">Product</div>
+                        <div class="mat-header-cell">Category</div>
+                        <div class="mat-header-cell">Material</div>
+                        <div class="mat-header-cell">Size</div>
+                        <div class="mat-header-cell">Brand</div>
+                        <div class="mat-header-cell">Grade</div>
+                        <div class="mat-header-cell">Color</div>
+                        <div class="mat-header-cell">MRP</div>
+                        <div class="mat-header-cell">UnitPrice</div>
+                        <div class="mat-header-cell">Cgst</div>
+                        <div class="mat-header-cell">Sgst</div>
+                        <div class="mat-header-cell">Quantity</div>
+                        <div class="mat-header-cell">Total</div>
+                    </div>
+                    <div *ngFor="let item of purchaseItems" class="mat-row">
+                        <div class="mat-cell">{{item.productName}}</div>
+                        <div class="mat-cell">{{item.categoryName}}</div>
+                        <div class="mat-cell">{{item.materialTypeName}}</div>
+                        <div class="mat-cell">{{item.sizeName}}</div>
+                        <div class="mat-cell">{{item.brandName}}</div>
+                        <div class="mat-cell">{{item.gradeName}}</div>
+                        <div class="mat-cell">{{item.colorName}}</div>
+                        <div class="mat-cell">{{item?.purchase?.mrp}}</div>
+                        <div class="mat-cell">{{item?.purchase?.unitPrice}}</div>
+                        <div class="mat-cell">{{item?.purchase?.cgstAmount}}</div>
+                        <div class="mat-cell">{{item?.purchase?.sgstAmount}}</div>
+                        <div class="mat-cell">{{item?.purchase?.quanitity}}</div>
+                        <div class="mat-cell">{{item?.purchase?.subTotal | number : '1.2-2'}}</div>
+                    </div>
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </mat-dialog-content>
+</div>

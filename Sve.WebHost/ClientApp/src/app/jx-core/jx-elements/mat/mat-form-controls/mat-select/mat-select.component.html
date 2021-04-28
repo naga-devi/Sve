@@ -1,0 +1,24 @@
+<mat-form-field class="mat-form-field-fluid w-100" appearance="outline" [hideRequiredMarker]="false">
+	<!-- <mat-label>{{label | translate}}</mat-label> -->
+	<mat-label>{{label}}</mat-label> 
+	<mat-select #select [formControl]="control" [placeholder]="placeholder" [multiple]="multiple">
+		<div *ngIf="!multiple && firstItem && firstItem.length > 0 && showDefault">
+			<mat-option>{{firstItem}}</mat-option>
+		</div>
+		<div *ngIf="multiple" class="select-all">
+			<mat-checkbox [(ngModel)]="allSelected"
+							[ngModelOptions]="{standalone: true}"
+							(change)="toggleAllSelection()">Select All</mat-checkbox>
+        </div>
+		<input class="search-control" *ngIf="baseResultItems.length > 0" placeholder="Search..." (keyup)="onFilterChange($event.target.value)">
+		<mat-option (click)="optionClick(item)" *ngFor="let item of filteredItems | async" [value]="item[valueField]">
+			{{item[textField]}}
+		</mat-option>
+    </mat-select>    
+    <mat-error *ngIf="isControlHasError('required')">
+		<!-- <strong>{{ 'AUTH.VALIDATION.REQUIRED_FIELD' | translate }}</strong> -->
+		<strong>{{label}}</strong> is required
+
+	  </mat-error>
+</mat-form-field>
+

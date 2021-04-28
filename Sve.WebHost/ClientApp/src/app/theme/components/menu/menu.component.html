@@ -1,0 +1,9 @@
+<mat-toolbar class="top-navbar mat-elevation-z2" fxLayoutAlign="center center">
+    <a mat-button routerLink="/" routerLinkActive="horizontal-active-link" [routerLinkActiveOptions]="{exact:true}">Home</a>
+    <a mat-button (click)="navigateToLink(category.id)" routerLinkActive="horizontal-active-link" *ngFor="let category of categories" [routerLinkActiveOptions]="{exact:true}">{{category.name}}</a>
+
+    <a mat-button routerLink="/contact" routerLinkActive="horizontal-active-link" [routerLinkActiveOptions]="{exact:true}">Contact</a>
+    <a mat-button *ngIf="authService.user$ | async as user" routerLink="/admin" routerLinkActive="horizontal-active-link" [routerLinkActiveOptions]="{exact:true}">Admin Panel</a>
+
+</mat-toolbar>
+

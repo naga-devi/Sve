@@ -1,0 +1,7 @@
+<mat-form-field [appearance]="appearance" class="mat-form-field-fluid w-100">
+  <mat-label>{{label}}</mat-label>
+  <input matInput #ref type="text" (dateChange)="dateChange(ref.value)" [matDatepicker]="jxDPck" [readonly]="readonly" [formControl]="control" [placeholder]="placeholder">
+  <mat-datepicker-toggle matSuffix [for]="jxDPck"></mat-datepicker-toggle>
+  <mat-datepicker #jxDPck></mat-datepicker>
+  <control-messages [control]="control"></control-messages>
+</mat-form-field>

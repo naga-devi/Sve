@@ -1,0 +1,52 @@
+<div class="p-1">
+    <mat-card class="p-0"> 
+        <div fxLayout="row wrap" fxLayoutAlign="space-between center" class="w-100 p-2">
+            <h2>Stock List</h2> 
+        </div>
+        <mat-divider></mat-divider>
+        <div class="mat-table admin-table">
+            <div class="mat-header-row">
+                <div class="mat-header-cell">Product Type</div>
+                <div class="mat-header-cell">Size</div>
+                <div class="mat-header-cell">Brand</div>                
+                <!-- <div class="mat-header-cell">NetPrice</div>
+                <div class="mat-header-cell">Tax</div> -->
+                <div class="mat-header-cell">MRP</div>
+                <div class="mat-header-cell">Discount</div>
+                <div class="mat-header-cell">SellPrice</div>
+                <div class="mat-header-cell">StockedQty</div>
+                <div class="mat-header-cell"></div>
+            </div>
+            <div *ngFor="let item of stockItems | paginate: { itemsPerPage: count, currentPage: page }" class="mat-row">
+                <div class="mat-cell">{{item?.materialType}}</div>
+                <div class="mat-cell">{{item?.sizeName}}</div>
+                <div class="mat-cell">{{item?.brandName}}</div>                
+                <!-- <div class="mat-cell">{{item?.netPrice}}</div>
+                <div class="mat-cell">{{item?.taxAmount}}</div> -->
+                <div class="mat-cell">{{item?.mrp}}</div>
+                <div class="mat-cell">{{item?.discount}}</div>
+                <div class="mat-cell">{{item?.sellPrice}}</div>
+                <div class="mat-cell">{{item?.stockedQty}}</div>
+                <div class="mat-cell">
+                    <div class="p-1 actions">
+                        <button mat-mini-fab color="primary" matTooltip="Edit price" (click)="editPrice(item)">
+                            <mat-icon>edit</mat-icon>
+                        </button>                        
+                        <!-- <button mat-mini-fab color="warn" matTooltip="Add purchases" class="mx-1" (click)="addPurchase(item)">
+                            <mat-icon>edit</mat-icon>
+                        </button> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </mat-card>
+
+    <div *ngIf="stockItems.length > 0" fxLayout="row wrap">
+        <div fxFlex="100"> 
+            <mat-card class="p-0 text-center">           
+                <pagination-controls class="product-pagination" autoHide="true" maxSize="10" (pageChange)="onPageChanged($event)"></pagination-controls>
+            </mat-card>
+        </div>
+    </div>
+</div>
+

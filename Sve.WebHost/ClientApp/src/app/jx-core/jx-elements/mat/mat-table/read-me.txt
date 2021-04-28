@@ -1,0 +1,128 @@
+Html:
+------------------------------
+<kt-jx-data-table 
+          [config]="config"
+		(onAction)="onActionHandler($event)"
+		(onPageChange)="onpageEventHandler($event)"
+		(onSortChange)="onsortEventHandler($event)"
+          >
+        </kt-jx-data-table>
+-------------Component-------------
+// Angular
+import { Component, OnInit, OnDestroy, ElementRef, ViewChild } from '@angular/core';
+import { MatSort, MatPaginator, MatTableDataSource, MatDialog, MatSnackBar } from '@angular/material';
+import { ActivatedRoute, Router } from '@angular/router';
+import { TranslationService } from '../../../../../core/_base/layout/services/translation.service';
+import { SelectionModel } from '@angular/cdk/collections';
+
+// RXJS
+import { merge, Observable, of, Subscription } from 'rxjs';
+import { tap, finalize } from 'rxjs/operators';
+
+// Layout
+import { LayoutUtilsService, BaseDataSource, MessageType, ResponseModel, ResponseStatus, QueryParamsModel } from '../../../../../core/_base/crud';
+import { JxMatTableConfig, IJxMatTableConfig } from '../../../../jx-module/mat-table/mat-table-config';
+
+// Modules/Services
+
+@Component({
+	selector: 'kt-hrm-salary-structure',
+	templateUrl: './structure.html',
+	styleUrls: []
+})
+export class SalaryStructureComponent implements OnInit, OnDestroy {
+
+	// Subscriptions
+	private subscriptions: Subscription[] = [];
+
+	cols = [
+		{ key: "FullName", display: "FullName", canSort: true },
+		{ key: "Id", display: "Code", canSort: true },
+		{ key: "CTC", display: "CTC" },
+		// following objects will contain a specific config parameters
+		// based on this params we will change the display of each column
+		{
+			key: "CreatedOn",
+			display: "Created Date",
+			// This column will hold a date value, so we must format the
+			// display to show as a date
+			config: {
+				sort: false,
+				isDate: true,
+				format: "dd MMM yy"
+			}
+		},
+		{
+			key: "ESIApplicable",
+			display: "Yes/NO",
+			// this column holds a boolean value, we will display a value
+			// in true/false cases
+			config: {
+				isBoolean: true,
+				values: { true: "Yes", false: "NO" }
+			}
+		},
+		{
+			key: "action",
+			display: "Action",
+			// in this column we have actions like activate/block account
+			// so we will create a button and create it event click
+			config: {
+				isAction: true,
+				actions: [{ action: "delete", title: "delete", color: "warn" }, { title: "edit", action: "edit", color: "primary" }]
+			}
+		}
+	];
+
+	deleteFormLabels: any = {
+		title: this.translate.getTranslation('CRUD.DELETE_ENTITY_FORM.TITLE', { name: 'salarystructure' }),
+		description: this.translate.getTranslation('CRUD.DELETE_ENTITY_FORM.DESCRIPTION', { name: 'salarystructure' }),
+		waitDesciption: this.translate.getTranslation('CRUD.DELETE_ENTITY_FORM.WAIT_DESCRIPTION', { name: 'salarystructure' }),
+		deleteMessage: this.translate.getTranslation('CRUD.DELETE_ENTITY_FORM.MESSAGE', { name: 'salarystructure' }),
+		selectRecord: this.translate.getTranslation('CRUD.DELETE_ENTITY_FORM.SELECT_RECORD'),
+	};
+
+	configSettings = {
+		listUrl: 'api/hrm/salarystructure/find',
+		displayColumns: this.cols,
+		sortActive: 'CTC',
+		sortDirection: 'asc',
+		filter: {},
+		titleText: 'Salary Setting',
+		enableSearch: true,
+		searchColumn: 'FirstName',
+		primaryColumn: 'Id',
+
+		deleteUrl: 'api/hrm/salarystructure/delete',
+		deleteArgs: this.deleteFormLabels
+	};
+
+	config = new JxMatTableConfig(this.configSettings);
+
+	constructor(
+		private layoutUtilsService: LayoutUtilsService,
+		private dialog: MatDialog,
+		private activatedRoute: ActivatedRoute,
+		private router: Router,
+		public snackBar: MatSnackBar,
+		private translate: TranslationService,
+	) { }
+
+	ngOnInit() {
+		//this.JxMatTableConfig = new JxMatTableConfig();
+		//this.JxMatTableConfig.displayColumns = this.cols;
+		//this.JxMatTableConfig.sortActive = 'username';
+		//this.JxMatTableConfig.sortDirection = 'desc';
+		//this.JxMatTableConfig.pagerTotalRecords = 25;
+		//this.JxMatTableConfig.hasLocalDataSource = true;
+		//this.JxMatTableConfig.dataSource = this.USERS_DATA ;
+	}
+
+	//studentSelectChanged(selectedId) {
+	//	this.selectedStudentId = selectedId;
+	//}
+
+	ngOnDestroy() {
+		this.subscriptions.forEach(el => el.unsubscribe());
+	}
+}

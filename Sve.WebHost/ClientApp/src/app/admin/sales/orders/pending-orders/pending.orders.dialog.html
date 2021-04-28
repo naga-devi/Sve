@@ -1,0 +1,199 @@
+﻿
+<div mat-dialog-content style="padding:0 !important;">
+    <mat-horizontal-stepper #horizontalStepper linear="true" class="mat-elevation-z2" fxShow="false" fxShow.gt-sm>
+        <mat-step label="Review Order">
+            <div fxLayout="row wrap">
+                <div fxFlex="100" class="p-1">
+                    <div class="divider"></div>
+                    <div class="mat-table review-order-table">
+                        <div class="mat-header-row">
+                            <!--<div class="mat-header-cell">Product</div>-->
+                            <div class="mat-header-cell">Name</div>
+                            <div class="mat-header-cell">Unit Price</div>
+                            <div class="mat-header-cell">Cgst</div>
+                            <div class="mat-header-cell">Sgst</div>
+                            <div class="mat-header-cell">Quantity</div>
+                            <div class="mat-header-cell">Total</div>
+                        </div>
+                        <div *ngFor="let product of orders; let i = index" class="mat-row">
+                            <!--<div class="mat-cell"><img [src]="product.imagePath"></div>-->
+                            <div class="mat-cell">{{product?.name}}</div>
+                            <div class="mat-cell">
+                                ₹{{product.unitPrice | number : '1.2-2'}}
+                            </div>
+                            <div class="mat-cell">{{product?.cgstAmount}}</div>
+                            <div class="mat-cell">{{product?.sgstAmount}}</div>
+                            <div class="mat-cell text-muted">
+                                <!--{{product.orderQty}}-->
+                                <!--<input type="number" placeholder="Quantity" [(ngModel)]="orders[i].orderQty" class="form-control">-->
+                                <div class="mat-table-input" style="width: 90% !important">
+                                    <mat-form-field appearance="outline" class="w-100">
+                                        <input matInput type="number" placeholder="Quantity" (keyup)="updateTotalItems($event)" required [(ngModel)]="orders[i].orderQty">
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="mat-cell">₹{{ ((product.unitPrice  + product?.cgstAmount + product?.sgstAmount) *product.orderQty) | number : '1.2-2'}}</div>
+                        </div>
+                        <div class="mat-row" *ngIf="orders && orders.length > 0">
+                            <div class="mat-cell"></div>
+                            <div class="mat-cell"></div>
+                            <div class="mat-cell"><strong>Total Items:</strong> {{totalItems}}</div>
+                            <div class="mat-cell"><strong>Grand Total:</strong> {{totalSubTotal}}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div fxLayout="row" fxLayoutAlign="center center" class="mt-2 p-1">
+                <button mat-raised-button color="warn" type="button" mat-dialog-close>Close</button>&nbsp;&nbsp;
+                <button mat-raised-button matStepperNext color="primary" matTooltip="Next" matTooltipPosition="after">Next</button>
+            </div>
+        </mat-step>
+        <mat-step label="Billing address" [stepControl]="billingForm">
+            <form [formGroup]="billingForm" autocomplete="off" class="p-2">
+                <div fxLayout="row wrap" class="mt-2">
+                    <div fxFlex="100" fxFlex.gt-sm="33.3" class="px-1">
+                        <mat-form-field appearance="outline" class="w-100">
+                            <mat-label>TinNo</mat-label>
+                            <input matInput placeholder="TinNo" (change)="getCustomerByTinNo()" formControlName="tinNo">
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex="100" fxFlex.gt-sm="33.3" class="px-1">
+                        <mat-form-field appearance="outline" class="w-100">
+                            <mat-label>Phone</mat-label>
+                            <input matInput placeholder="Phone" (change)="getCustomerByPhone()" formControlName="phoneNo" required>
+                            <mat-error *ngIf="billingForm.controls.phoneNo.errors?.required">Phone number is required</mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex="100" fxFlex.gt-sm="33.3" class="px-1">
+                        <mat-form-field appearance="outline" class="w-100">
+                            <mat-label>Full name</mat-label>
+                            <input matInput placeholder="Full name" formControlName="name" required>
+                            <mat-error *ngIf="billingForm.controls.name.errors?.required">Full name is required</mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex="100" fxFlex.gt-sm="33.3" class="px-1">
+                        <mat-form-field appearance="outline" class="w-100">
+                            <mat-label>Company</mat-label>
+                            <input matInput placeholder="Company" formControlName="companyName">
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex="100" fxFlex.gt-sm="33.3" class="px-1">
+                        <mat-form-field appearance="outline" class="w-100">
+                            <mat-label>Email</mat-label>
+                            <input matInput type="email" placeholder="Email" formControlName="email">
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex="100" fxFlex.gt-sm="33.3" class="px-1">
+                        <mat-form-field appearance="outline" class="w-100">
+                            <mat-label>City</mat-label>
+                            <input matInput placeholder="City" formControlName="city">
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex="100" fxFlex.gt-sm="33.3" class="px-1">
+                        <mat-form-field appearance="outline" class="w-100">
+                            <mat-label>Zip/Postal Code</mat-label>
+                            <input matInput placeholder="Zip/Postal Code" formControlName="zipCode">
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex="100" fxFlex.gt-sm="66.6" class="px-1">
+                        <mat-form-field appearance="outline" class="w-100">
+                            <mat-label>Address</mat-label>
+                            <input matInput placeholder="Address (street, apartment, suite, unit etc.)" formControlName="address" required>
+                            <mat-error *ngIf="billingForm.controls.address.errors?.required">Address is required</mat-error>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div fxLayout="row" fxLayoutAlign="center center" class="mt-2 p-1">
+                    <button mat-raised-button matStepperPrevious color="primary" matTooltip="Back" matTooltipPosition="before" class="mr-1">Previous</button>&nbsp;&nbsp;
+                    <button mat-raised-button matStepperNext color="primary" matTooltip="Next" matTooltipPosition="after" class="mr-1">Next</button>
+                </div>
+            </form>
+        </mat-step>
+
+        <mat-step [stepControl]="paymentForm" label="Payment method">
+            <form [formGroup]="paymentForm" autocomplete="off">
+                <div fxLayout="row wrap">
+                    <div fxFlex="100" fxFlex.gt-sm="33.3" class="px-1">
+                        <mat-form-field appearance="outline" class="w-100">
+                            <mat-label>Total</mat-label>
+                            <input matInput placeholder="Sub Total" formControlName="totalAmount" readonly required type="number">
+                            <mat-error *ngIf="paymentForm.controls.totalAmount.errors?.required">Total is required</mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex="100" fxFlex.gt-sm="33.3" class="px-1">
+                        <mat-form-field appearance="outline" class="w-100">
+                            <mat-label>Discount(%)</mat-label>
+                            <input matInput placeholder="Discount" formControlName="discountPercentage" type="number" (keyup)="updateGrandTotal()">
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex="100" fxFlex.gt-sm="33.3" class="px-1">
+                        <mat-form-field appearance="outline" class="w-100">
+                            <mat-label>Net Amount</mat-label>
+                            <input matInput placeholder="Net Amount" formControlName="netAmount" type="number" readonly>
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex="100" fxFlex.gt-sm="33.3" class="px-1">
+                        <mat-form-field appearance="outline" class="w-100">
+                            <mat-label>Grand Total</mat-label>
+                            <input matInput placeholder="Grand Total" formControlName="grandTotal" type="number" (keyup)="updateRoundOff()">
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex="100" fxFlex.gt-sm="33.3" class="px-1">
+                        <mat-form-field appearance="outline" class="w-100">
+                            <mat-label>Round Off</mat-label>
+                            <input matInput placeholder="Net Amount" formControlName="roundOffAmount" readonly type="number">
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex="100" fxFlex.gt-sm="33.3" class="px-1">
+                        <mat-form-field appearance="outline" class="w-100">
+                            <mat-label>Paid Amount</mat-label>
+                            <input matInput placeholder="Paid Amount" formControlName="paidAmount" type="number" (keyup)="updateBalance()">
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex="100" fxFlex.gt-sm="33.3" class="px-1">
+                        <mat-form-field appearance="outline" class="w-100">
+                            <mat-label>Balance Amount</mat-label>
+                            <input matInput placeholder="Balance Amount" formControlName="balanceAmount" type="number" readonly>
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex="100" fxFlex.gt-sm="33.3" class="px-1">
+                        <mat-form-field appearance="outline" class="w-100">
+                            <mat-label>Paymode</mat-label>
+                            <mat-select placeholder="Paymode" formControlName="paymode" required>
+                                <mat-option *ngFor="let paymode of paymodes" [value]="paymode.id">
+                                    {{paymode.name}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex="100" fxFlex.gt-sm="33.3" class="px-1" [style.display]="paymentForm.get('paymode').value && paymentForm.get('paymode').value > 1 ? 'block' :'none' ">
+                        <mat-form-field appearance="outline" class="w-100">
+                            <mat-label>Transaction#</mat-label>
+                            <input matInput placeholder="Transaction#" formControlName="transactionNo">
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div fxLayout="row" fxLayoutAlign="center center" class="mt-2 p-1">
+                    <button mat-raised-button matStepperPrevious color="primary" matTooltip="Back" matTooltipPosition="before" class="mr-1">Previous</button>&nbsp;&nbsp;
+                    <button mat-raised-button matStepperNext color="primary" (click)="confirmOrder()" matTooltip="Next" matTooltipPosition="after">Confirm order now</button>
+                </div>
+            </form>
+        </mat-step>
+        <mat-step label="Confirmation">
+            <div fxLayout="column" fxLayoutAlign="center center" class="p-2 text-center">
+                <button mat-fab color="primary">
+                    <mat-icon *ngIf="entityResponse && entityResponse.code ==1">check</mat-icon>
+                    <mat-icon *ngIf="entityResponse && entityResponse.code !=1">clear</mat-icon>
+                </button>
+                <h2 class="py-2">{{checkoutStatusText}}</h2>
+                <!--<p *ngIf="orderId && orderId> 0" class="text-muted">Please contact billing section with orderid #(<strong>{{orderId}}</strong>)</p>-->
+            </div>
+            <div fxLayout="row" fxLayoutAlign="center center" class="mt-2 p-1">
+                <button mat-raised-button matStepperPrevious color="primary" *ngIf="showBackButton" matTooltip="Back" matTooltipPosition="before" class="mr-1">Previous</button>&nbsp;&nbsp;
+                <button mat-raised-button color="warn" type="button" mat-dialog-close>Return to Orders</button>
+                <button mat-raised-button color="primary" type="button" (click)="downloadInvoiece()" *ngIf="entityResponse && entityResponse.code == 1">Download Invoice</button>
+            </div>
+
+        </mat-step>
+    </mat-horizontal-stepper>
+</div>

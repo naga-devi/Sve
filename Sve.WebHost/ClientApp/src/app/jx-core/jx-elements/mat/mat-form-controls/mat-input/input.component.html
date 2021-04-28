@@ -1,0 +1,20 @@
+<mat-form-field class="mat-form-field-fluid w-100" [hideRequiredMarker]="false" [appearance]="appearance">
+  <mat-label>{{label}}</mat-label> 
+  <input #jxinput (keyup)="onKeyUp.emit(jxinput.value)" (change)="onChange.emit(jxinput.value)" [type]="type" matInput [formControl]="control" placeholder="{{placeholder}}" />
+  <button mat-button *ngIf="showClearButton && jxinput.value" matSuffix mat-icon-button aria-label="Clear" (click)="jxinput.value = '';">
+    <mat-icon>close</mat-icon>
+  </button>
+  <!-- <mat-error *ngIf="errorMessage !== null">{{errorMessage}}</mat-error> -->
+  <mat-error *ngIf="isControlHasError('required')">
+    <strong>{{label}} is required</strong>
+  </mat-error>
+  <mat-error *ngIf="isControlHasError('email')">
+    <strong>Invalid email</strong>
+  </mat-error>
+  <mat-error *ngIf="isControlHasError('minLength')">
+    <strong>Min length is 3 characters</strong>
+  </mat-error>
+  <mat-error *ngIf="isControlHasError('maxLength')">
+    <strong>Max length is 250 characters</strong>
+  </mat-error>
+</mat-form-field>

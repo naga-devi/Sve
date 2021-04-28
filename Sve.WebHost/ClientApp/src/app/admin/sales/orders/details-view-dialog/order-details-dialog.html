@@ -1,0 +1,92 @@
+﻿<div class="p-1">
+<mat-dialog-content>
+    <mat-card>
+        <div fxLayout="row wrap" fxLayoutAlign="space-between center" class="w-100 p-2">
+            <h2>{{data.order?.customer?.name}} Sales Order</h2>
+            <button mat-raised-button color="warn" type="button" mat-dialog-close>Close</button>
+        </div>
+        <mat-divider></mat-divider>
+        <mat-card-content>            
+            <table class="jx-display-table">
+                <tr>
+                    <td><strong>Customer Name:</strong></td>
+                    <td>{{data.order?.customer?.name}}</td>
+                    <td><strong>Contact No.:</strong></td>
+                    <td>{{data.order?.customer?.phoneNo}}</td>
+                    <td><strong>Company Name:</strong></td>
+                    <td>{{data.order?.customer?.companyName}}</td>
+                </tr>
+                <tr>
+                    <td><strong>OrderDate:</strong></td>
+                    <td>{{data.order?.orderDate | date}}</td>
+                    <td><strong>Total Quantity:</strong></td>
+                    <td>{{data.order?.totalQuantity}}</td>
+                    <td><strong>Total Amount:</strong></td>
+                    <td>{{data.order?.totalAmount}}</td>
+                </tr>
+                <tr>
+                    <td><strong>Discount(%):</strong></td>
+                    <td>{{data.order?.discountPercentage}}</td>
+                    <td><strong>Net Amount:</strong></td>
+                    <td>{{data.order?.netAmount}}</td>
+                    <td><strong>RoundOff:</strong></td>
+                    <td>{{data.order?.roundOffAmount}}</td>
+                </tr>
+                <tr>
+                    <td><strong>Grand Total:</strong></td>
+                    <td>{{data.order?.grandTotal}}</td>
+                    <td><strong>Paid Amount:</strong></td>
+                    <td>{{data.order?.paidAmount}}</td>
+                    <td><strong>Balance Amount:</strong></td>
+                    <td>{{data.order?.balanceAmount}}</td>
+                </tr>
+                <tr>
+                    <td><strong>Paymode:</strong></td>
+                    <td>{{data.order?.paymodeText}}</td>
+                    <td><strong>Transaction No.:</strong></td>
+                    <td>{{data.order?.TransactionNo}}</td>
+                    <td><strong>Modified On:</strong></td>
+                    <td>{{data.order?.modifiedOn}}</td>
+                </tr>
+            </table>
+        </mat-card-content>
+        <mat-divider></mat-divider>
+        <div fxLayout="row wrap" fxLayoutAlign="space-between center" class="w-100 p-2">
+            <h2>Sales Items</h2>
+        </div>
+        <mat-divider></mat-divider>
+        <mat-card-content>
+            <div class="mat-table admin-table">
+                <div class="mat-header-row">
+                    <div class="mat-header-cell">Product</div>
+                    <div class="mat-header-cell">Category</div>
+                    <div class="mat-header-cell">Material</div>
+                    <div class="mat-header-cell">Size</div>
+                    <div class="mat-header-cell">Brand</div>
+                    <div class="mat-header-cell">Grade</div>
+                    <div class="mat-header-cell">Color</div>
+                    <div class="mat-header-cell">Rate</div>
+                    <div class="mat-header-cell">CGST</div>
+                    <div class="mat-header-cell">SGST</div>
+                    <div class="mat-header-cell">Quantity</div>
+                    <div class="mat-header-cell">Amount</div>
+                </div>
+                <div *ngFor="let item of purchaseItems" class="mat-row">
+                    <div class="mat-cell">{{item.productName}}</div>
+                    <div class="mat-cell">{{item.categoryName}}</div>
+                    <div class="mat-cell">{{item.materialTypeName}}</div>
+                    <div class="mat-cell">{{item.sizeName}}</div>
+                    <div class="mat-cell">{{item.brandName}}</div>
+                    <div class="mat-cell">{{item.gradeName}}</div>
+                    <div class="mat-cell">{{item.colorName}}</div>
+                    <div class="mat-cell">{{item?.sales?.unitPrice | number : '1.2-2'}}</div>
+                    <div class="mat-cell">{{item?.sales?.cgstAmount | number : '1.2-2'}}</div>
+                    <div class="mat-cell">{{item?.sales?.sgstAmount | number : '1.2-2'}}</div>
+                    <div class="mat-cell">{{item?.sales?.orderQty}}</div>
+                    <div class="mat-cell">{{item?.sales?.subTotal | number : '1.2-2'}}</div>
+                </div>
+            </div>
+        </mat-card-content>
+    </mat-card>
+</mat-dialog-content>
+</div>

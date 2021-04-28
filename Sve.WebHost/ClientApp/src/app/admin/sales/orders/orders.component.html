@@ -1,0 +1,64 @@
+﻿<div class="p-1">
+    <mat-card class="p-0">
+        <div fxLayout="row wrap" fxLayoutAlign="space-between center" class="w-100 p-2">
+            <div fxFlex="100%">
+                <div class="user-search" name="searchform" autocomplete="off">
+                    <mat-form-field floatLabel="auto" hideRequiredMarker appearance="outline" class="user-search-input">
+                        <input matInput type="number" placeholder="Search by order#..." (keydown.enter)="searchByOrderNo($event)" name="search">
+                        <!--<button mat-mini-fab matSuffix color="primary" aria-label="search">
+                            <mat-icon>search</mat-icon>
+                        </button>-->
+                    </mat-form-field>
+                </div>
+                
+            </div>
+            <!--<div fxFlex="20%">
+                <button mat-flat-button color="primary" type="button">Search</button>
+            </div>-->
+        </div>
+        <mat-divider></mat-divider>
+
+        <div fxLayout="row wrap" fxLayoutAlign="space-between center" class="w-100 p-2">
+            <h2>Orders List</h2>
+        </div>
+
+        <div class="mat-table admin-table">
+            <div class="mat-header-row">
+                <div class="mat-header-cell">Order</div>
+                <div class="mat-header-cell">Date</div>
+                <div class="mat-header-cell">Status</div>
+                <div class="mat-header-cell">Total</div>
+                <div class="mat-header-cell"></div>
+            </div>
+            <div *ngFor="let order of orders | paginate: { itemsPerPage: count, currentPage: page }" class="mat-row">
+                <div class="mat-cell"><span class="order">#{{order.salesOrderId}}</span></div>
+                <div class="mat-cell">{{order.orderDate | date}}</div>
+                <div class="mat-cell">{{order.statusText}}</div>
+                <div class="mat-cell"><strong>₹{{order.grandTotal}}</strong> for <strong>{{order.totalQuantity}}</strong> item</div>
+                <div class="mat-cell">
+                    <div class="p-1 actions">
+                        <button mat-mini-fab color="primary" *ngIf="order.status == 1" (click)="openOrderEditDialog(order)" matTooltip="View">
+                            <mat-icon>edit</mat-icon>
+                        </button>
+                        <button *ngIf="order.status == 4" (click)="openOrderViewDialog(order)" mat-mini-fab color="primary" matTooltip="View">
+                            <mat-icon>remove_red_eye</mat-icon>
+                        </button>
+                        <button *ngIf="order.status == 4" mat-mini-fab color="warn" (click)="downloadInvoice(order.salesOrderId)" matTooltip="View invoice" class="btn-invoice">
+                            <mat-icon>receipt</mat-icon>
+                        </button>
+                        <button *ngIf="order.status == 4" mat-mini-fab color="primary" (click)="printInvoice(order.salesOrderId)" matTooltip="Print invoice" class="btn-invoice">
+                            <mat-icon>print</mat-icon>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </mat-card>
+    <div *ngIf="orders.length > 0" fxLayout="row wrap">
+        <div fxFlex="100">
+            <mat-card class="p-0 text-center">
+                <pagination-controls class="product-pagination" autoHide="true" maxSize="5" (pageChange)="onPageChanged($event)"></pagination-controls>
+            </mat-card>
+        </div>
+    </div>
+</div>

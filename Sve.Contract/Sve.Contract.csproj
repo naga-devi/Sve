@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="JxNet.Core" Version="2.1.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Interface\Iam\IPermissionsService.cs" />
+    <Compile Remove="Interface\Iam\IRolePermissionsService.cs" />
+    <Compile Remove="Interface\Iam\IRoleService.cs" />
+    <Compile Remove="Interface\Iam\IUserRolesService.cs" />
+    <Compile Remove="Interface\Logs\IDatabaseLogService.cs" />
+    <Compile Remove="Interface\Logs\IErrorLogService.cs" />
+    <Compile Remove="Interface\Product\IPurchasesService.cs" />
+    <Compile Remove="Models\Product\Purchases.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Interface\Logs\" />
+  </ItemGroup> 
+
+</Project>

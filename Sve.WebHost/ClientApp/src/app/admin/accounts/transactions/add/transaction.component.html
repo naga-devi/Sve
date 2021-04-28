@@ -1,0 +1,106 @@
+<div class="p-1">
+    <mat-card class="p-0">
+        <div fxLayout="row wrap" fxLayoutAlign="space-between center" class="w-100 p-2">
+            <h2>New Transaction</h2>
+            <button mat-raised-button color="primary" (click)="openCouponDialog(null)">Add Coupon</button>
+        </div>
+        <mat-divider></mat-divider>
+        <div fxLayout="row wrap" fxLayoutAlign="space-between center" class="w-100 p-2">
+            <jx-mat-form [title]="''" [saveDisabled]="fConfig.fGroup.invalid" [saving]="fConfig.saving"
+                [formLoading]="fConfig.formLoading" [isMatDialog]="true" [parentGroup]="fConfig.fGroup"
+                [showToolBar]="false" (onSave)="onSubmit(true)" (onCancel)="goBackToList()">
+                <div fxFlex="100" class="px-2">
+                    <div fxLayout="row wrap">
+                        <div fxFlex="100" fxFlex.gt-sm="33.3" class="px-1">
+                            <div class="form-group kt-form__group">
+                                <kt-jx-mat-select (selectChange)="voucherTypeChanged($event)" [loadOnChange]="false"
+                                    [loadOnInit]="true" [label]="'Voucher Type'" [url]="'accounts/vouchertypes/all'"
+                                    [valueField]="'voucherTypeId'" [textField]="'name'"
+                                    [control]="fConfig.fGroup.get('VoucherTypeId')"></kt-jx-mat-select>
+                            </div>
+                        </div>
+                        <div fxFlex="100" fxFlex.gt-sm="33.3" class="px-1">
+                            <div class="form-group kt-form__group">
+                                <kt-jx-mat-select (selectChange)="accountTypeChanged($event)" [loadOnChange]="false" [loadOnInit]="true" [label]="'Account'"
+                                    [url]="'accounts/accounttypes/all'" [valueField]="'accountTypeId'"
+                                    [textField]="'name'" [control]="fConfig.fGroup.get('AccountTypeId')">
+                                </kt-jx-mat-select>
+                            </div>
+                        </div>
+                        <div fxFlex="100" fxFlex.gt-sm="33.3" class="px-1">
+                            <div class="form-group kt-form__group">
+                                <!-- <kt-jx-mat-select [loadOnChange]="false" [loadOnInit]="true" [label]="'Customer'"
+                                    [url]="'accounts/customers/all'" [valueField]="'customerId'" [textField]="'name'"
+                                    [control]="fConfig.fGroup.get('CustomerId')"></kt-jx-mat-select> -->
+                                <kt-jx-autocomplete [label]="'Customer'" [url]="customerApiUrl"
+                                    [placeholder]="'Search customer'" [valueField]="'customerId'" [textField]="'name'"
+                                    [control]="fConfig.fGroup.get('CustomerId')"></kt-jx-autocomplete>
+                            </div>
+                        </div>
+                        <div fxFlex="100" fxFlex.gt-sm="33.3" class="px-1">
+                            <div class="form-group kt-form__group">
+                                <jx-mat-input [label]="'Paid Amount'" [placeholder]="'0'" [type]="'number'"
+                                    [control]="fConfig.fGroup.get('PaidAmount')"></jx-mat-input>
+                            </div>
+                        </div>
+                        <div fxFlex="100" fxFlex.gt-sm="33.3" class="px-1">
+                            <div class="form-group kt-form__group">
+                                <jx-mat-date-picker [label]="'Paid Date'" [placeholder]="'DD/MM/YYYY'" [readonly]="true"
+                                    [control]="fConfig.fGroup.get('PaidDate')"></jx-mat-date-picker>
+                            </div>
+                        </div>
+                        <div fxFlex="100" fxFlex.gt-sm="33.3" class="px-1"
+                            *ngIf="fConfig.fGroup.get('AccountTypeId').value && fConfig.fGroup.get('AccountTypeId').value != '1'">
+                            <div class="form-group kt-form__group">
+                                <kt-jx-mat-select [loadOnChange]="false" (selectChange)="paymodeChanged($event)" [loadOnInit]="true" [label]="'Paymode'"
+                                    [url]="'accounts/paymodes/all'" [valueField]="'payModeId'" [textField]="'name'"
+                                    [control]="fConfig.fGroup.get('PayModeId')"></kt-jx-mat-select>
+                            </div>
+                        </div>
+                        <div *ngIf="showBankAccountSection && fromAccounts | async as frmacnt" fxFlex="100" fxFlex.gt-sm="50" class="px-1">
+                            <div class="form-group kt-form__group">
+                                <kt-jx-mat-select [serverProcess]="false" [loadOnChange]="false" [loadOnInit]="false" [label]="'From Account'"
+                                    [dataSource]="fromAccounts | async" [valueField]="'accountId'"
+                                    [textField]="'name'" [control]="fConfig.fGroup.get('FromAccountId')">
+                                </kt-jx-mat-select>
+                            </div>
+                        </div>
+                        <div *ngIf="showBankAccountSection && toAccounts | async as toacnt" fxFlex="100" fxFlex.gt-sm="50" class="px-1">
+                            <div class="form-group kt-form__group">
+                                <kt-jx-mat-select [serverProcess]="false" [loadOnChange]="false" [loadOnInit]="false" [label]="'To Account'"
+                                    [dataSource]="toAccounts | async" [valueField]="'accountId'"
+                                    [textField]="'name'" [control]="fConfig.fGroup.get('ToAccountId')">
+                                </kt-jx-mat-select>
+                            </div>
+                        </div>
+                        <div *ngIf="showBankAccountSection && showChequeSection" fxFlex="100" fxFlex.gt-sm="33.3" class="px-1">
+                            <div class="form-group kt-form__group">
+                                <jx-mat-input [label]="'ChequeNo'" [placeholder]="'Cheque#'"
+                                    [control]="fConfig.fGroup.get('ChequeNo')"></jx-mat-input>
+                            </div>
+                        </div>
+                        <div *ngIf="showBankAccountSection && showChequeSection" fxFlex="100" fxFlex.gt-sm="33.3" class="px-1">
+                            <div class="form-group kt-form__group">
+                                <jx-mat-date-picker [label]="'Cheque Date'" [placeholder]="'DD/MM/YYYY'"
+                                    [readonly]="true" [control]="fConfig.fGroup.get('ChequeDate')">
+                                </jx-mat-date-picker>
+                            </div>
+                        </div>
+                        <div *ngIf="showBankAccountSection" fxFlex="100" fxFlex.gt-sm="33.3" class="px-1">
+                            <div class="form-group kt-form__group">
+                                <jx-mat-input [label]="'UTRNo'" [placeholder]="'UTR#'"
+                                    [control]="fConfig.fGroup.get('UTRNo')"></jx-mat-input>
+                            </div>
+                        </div>
+                        <div fxFlex="100" fxFlex.gt-sm="100" class="px-1">
+                            <div class="form-group kt-form__group">
+                                <jx-mat-input [label]="'Remarks'" [placeholder]="'Enter remarks'"
+                                    [control]="fConfig.fGroup.get('Remarks')"></jx-mat-input>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </jx-mat-form>
+        </div>
+    </mat-card>
+</div>

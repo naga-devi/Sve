@@ -1,0 +1,42 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Impl\Logs\**" />
+    <EmbeddedResource Remove="Impl\Logs\**" />
+    <None Remove="Impl\Logs\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Domain\Product\Purchases.cs" />
+    <Compile Remove="Impl\Prodcut\PurchasesService.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Domain\CdrContext.cs.bak" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
+    <PackageReference Include="JetBrains.Annotations" Version="2020.3.0"></PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="5.0.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.4" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
+
+    <PackageReference Include="JxNet.Core" Version="2.1.1" />
+    <PackageReference Include="JxNet.Extensions.CacheManager" Version="2.0.0" />
+    <PackageReference Include="JxNet.Extensions.EFCore.SqlServer" Version="5.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Sve.Contract\Sve.Contract.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Shared\" />
+  </ItemGroup>
+</Project>

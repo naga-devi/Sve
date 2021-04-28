@@ -1,0 +1,41 @@
+<div #jxform class="kt-portlet" [ngClass]="{ 'kt-portlet--body-progress' : formLoading }">
+  <div class="kt-portlet__head kt-portlet__head--lg">
+    <div class="kt-portlet__head-label">
+      <h3 class="kt-portlet__head-title">{{ title }}</h3>
+    </div>
+    <div class="kt-portlet__head-toolbar" *ngIf="showToolBar" >
+      <a  *ngIf="showToolBarBackBtn" (click)="onCancel.emit()" class="btn btn-secondary kt-margin-r-10" mat-raised-button>
+        <i class="la la-arrow-left"></i>
+        <span class="kt-hidden-mobile">
+          <span>Back</span>
+        </span>
+      </a>
+      <jx-mat-raised-button *ngIf="showToolBarAddBtn"  (onClick)="onToolBarAdd.emit()" [title]="toolBarAddBtnText"
+              [isFilterButton]="false"></jx-mat-raised-button>
+    </div>
+  </div>
+  <form class="kt-form" [formGroup]="parentGroup" autocomplete="off">
+    <div class="kt-portlet__body">
+      <!-- <div class="kt-portlet__body-progress">
+        <mat-spinner [diameter]="20"></mat-spinner>
+      </div> -->
+      <ng-content></ng-content>
+    </div>
+    <div class="kt-portlet__foot kt-portlet__foot--fit kt-portlet__no-border">
+      <div class="kt-form__actions kt-form__actions--solid p-20px">
+        <div class="row text-right">
+          <div class="col-lg-12">
+            <jx-mat-dialog-close-button *ngIf="isMatDialog" [disabled]="cancelDisabled" [title]="cancelText"
+              (onClick)="onCancel.emit()"></jx-mat-dialog-close-button>&nbsp;
+            <button mat-raised-button *ngIf="!isMatDialog" [disabled]="cancelDisabled"
+              (click)="onCancel.emit()">
+              {{ cancelText }}
+            </button>&nbsp;
+            <jx-mat-raised-button (onClick)="emitSaveAction()" [title]="saveText" [loading]="saving"
+              [disabled]="saving || saveDisabled" [isFilterButton]="false"></jx-mat-raised-button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
