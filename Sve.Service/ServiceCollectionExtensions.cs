@@ -1,15 +1,14 @@
-﻿namespace Sve.Service
-{
-    using AutoMapper;
-    using JetBrains.Annotations;
-    using JxNet.Extensions.CacheManager;
-    using Microsoft.EntityFrameworkCore;
-    //using Microsoft.Extensions.Configuration;
-    using Microsoft.Extensions.DependencyInjection;
-    using Sve.Service.Data;
-    using Sve.Service.Mappers;
-    using System;
+﻿using JetBrains.Annotations;
+using JxNet.Extensions.CacheManager;
+using Microsoft.EntityFrameworkCore;
+//using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Sve.Service.Data;
+using Sve.Service.Mappers;
+using System;
 
+namespace Sve.Service
+{
     public static class ServiceCollectionExtensions
     {
         public static IServiceCollection RegisterServiceInterfaces([NotNull] this IServiceCollection services/*, IConfiguration configuration*/, [NotNull] string connectionString)
