@@ -1,7 +1,8 @@
 
 namespace Sve.Service.Domain.Accounts
 {
-	using System;
+    using Sve.Service.Domain.Purchasing;
+    using System;
 	using System.Collections.Generic;
 
     internal class Customer //: AuditEntityBase

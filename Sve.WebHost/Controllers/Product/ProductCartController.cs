@@ -129,7 +129,7 @@ namespace Sve.WebHost.Controllers
                 UnitPrice = item.StockItems?.NetPrice,
                 item.StockItems?.Cgst,
                 item.StockItems?.Sgst,
-                AvailibilityCount = item?.StockItems?.PurchaseOrderDetails.Sum(t => t.Quanitity) - item?.StockItems?.SalesOrderDetails.Sum(t => t.OrderQty),
+                AvailibilityCount = item?.StockItems?.PurchaseOrderDetails.Sum(t => t.StockedQty) - item?.StockItems?.SalesOrderDetails.Sum(t => t.SoldQty),
                 TotalAvailibilityCount = item.AvailibilityCount,
                 //AvailibilityCount = x.StockedQuantity ?? 0 - x.SoldQuantity ?? 0,
                 item.CategoryId,
@@ -210,7 +210,7 @@ namespace Sve.WebHost.Controllers
                 item.Cgst,
                 item.Sgst,
                 unitPrice = item.NetPrice,
-                AvailibilityCount = item.PurchaseOrderDetails.Sum(t => t.Quanitity) - item.SalesOrderDetails.Sum(t => t.OrderQty),
+                AvailibilityCount = item.PurchaseOrderDetails.Sum(t => t.StockedQty) - item.SalesOrderDetails.Sum(t => t.SoldQty),
             });
         }
 

@@ -1,13 +1,13 @@
 ﻿namespace Sve.Service.Domain.Purchasing
 {
     using JxNet.Extensions.EFCore.SqlServer;
-    using System;
     using System.Collections.Generic;
 
     internal partial class Vendors: AuditEntityBase
     {
         public Vendors()
         {
+            CreditNotes = new HashSet<CreditNotes>();
             OrderHeader = new HashSet<PurchaseOrderHeader>();
         }
 
@@ -22,6 +22,7 @@
         public string Cstno { get; set; }
         public int? Status { get; set; }
 
+        public virtual ICollection<CreditNotes> CreditNotes { get; set; }
         public virtual ICollection<PurchaseOrderHeader> OrderHeader { get; set; }
     }
 }

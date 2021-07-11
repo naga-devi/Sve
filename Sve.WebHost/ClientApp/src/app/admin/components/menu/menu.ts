@@ -23,6 +23,9 @@ export const menuItems = [
     new Menu(300, 'Purchases', null, null, 'add_circle_outline', null, true, 0),
     new Menu(301, 'Orders', '/admin/purchases/orders', null, 'list_alt', null, false, 300),
     new Menu(302, 'Add Order', '/admin/purchases/add-purchase', null, 'add_circle_outline', null, false, 300),
+    new Menu(303, 'Returns', '/admin/purchases/purchase-returns', null, 'list_alt', null, false, 300),
+    new Menu(304, 'Credit Notes', '/admin/purchases/credit-notes', null, 'list_alt', null, false, 300),
+
 
     new Menu(400, 'Accounts', null, null, 'add_circle_outline', null, true, 0),
     new Menu(401, 'Payments', '/admin/accounts/transaction', null, 'list_alt', null, false, 400),

@@ -25,6 +25,7 @@ namespace Sve.Contract.Models.Product
 
         public decimal Cgst { get; set; }
         public decimal Sgst { get; set; }
+        public decimal Igst { get; set; }
         public bool? IsPrime { get; set; }
         public short? MinimumStock { get; set; }
         public byte? RatingsCount { get; set; }

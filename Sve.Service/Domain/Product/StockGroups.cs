@@ -7,7 +7,7 @@
 
     internal partial class StockGroups : AuditEntityBase
     {
-        public int? ProductId { get; set; }
+        public int ProductId { get; set; }
         public int StockGroupId { get; set; }
         public int MaterialTypeId { get; set; }
         public int SizeId { get; set; }
@@ -18,16 +18,17 @@
         public decimal NetPrice { get; set; }
         public decimal Cgst { get; set; }
         public decimal Sgst { get; set; }
+        public decimal Igst { get; set; }
         public decimal TaxAmount { get; set; }
-        public decimal? Mrp { get; set; }
-        public decimal? Discount { get; set; }
+        public decimal Mrp { get; set; }
+        public decimal Discount { get; set; }
         public decimal? SellPrice { get; set; }
-        public bool? IsPrime { get; set; }
-        public short? MinimumStock { get; set; }
+        public bool IsPrime { get; set; }
+        public short MinimumStock { get; set; }
         public byte? RatingsCount { get; set; }
         public short? RatingsValue { get; set; }
         public string Description { get; set; }
-        public int? Status { get; set; }
+        public int Status { get; set; }
         public Colors Color { get; set; }
         public Grades Grade { get; set; }
         public ProductBrands Brand { get; set; }

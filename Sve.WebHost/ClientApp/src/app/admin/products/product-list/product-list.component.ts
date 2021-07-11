@@ -15,11 +15,12 @@ import { NgxSpinnerService } from "ngx-spinner";
 export class ProductListComponent implements OnInit {
   public products: Array<Product> = [];
   public viewCol: number = 25;
-  public page: any;
-  public count = 0;
+  public page: any = 1;
+  public count = 12;
   public productFilter = new ProductFilter();
   public categories = [];
   public form: FormGroup;
+  totalCount: any;
   constructor(
     public appService: AppService,
     public dialog: MatDialog,
@@ -55,7 +56,7 @@ export class ProductListComponent implements OnInit {
       .postBy("product/productdetails/find", this.productFilter)
       .subscribe((data) => {
         this.products = data.items ? data.items : [];
-        this.count = data.totalCount;
+        this.totalCount = data.totalCount;
         this.spinner.hide('PROD_LIST');
       });
   }

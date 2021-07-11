@@ -89,8 +89,9 @@ namespace Sve.Service.Impl.Product
                         SellPrice = m.SellPrice,
                     })
                    .FirstOrDefault(),
-                    StockedQuantity = x.StockGroups.SelectMany(s => s.PurchaseOrderDetails).Sum(t => t.Quanitity),
-                    SoldQuantity = x.StockGroups.SelectMany(s => s.SalesOrderDetails.Where(m => x.Status == (int)SalesOrderStatus.Completed)).Sum(t => t.OrderQty)
+                    StockedQuantity = x.StockGroups.SelectMany(s => s.PurchaseOrderDetails).Sum(t => t.StockedQty),
+                    SoldQuantity = x.StockGroups.SelectMany(s => s.SalesOrderDetails.Where(m => x.Status == (int)SalesOrderStatus.Completed)).Sum(t => t.SoldQty)
+                    //SoldQty = x.StockGroups.SelectMany(s => s.SalesOrderDetails.Where(m => x.Status == (int)SalesOrderStatus.Completed)).Sum(t => t.SoldQty)
                 })
                 .AsNoTracking()
                 .GetPaginateAsync(filter.PageNumber, filter.PageSize);
@@ -143,28 +144,28 @@ namespace Sve.Service.Impl.Product
                            SellPrice = m.SellPrice,
                            PurchaseOrderDetails = m.PurchaseOrderDetails.Select(t => new PurchasingModels.PurchaseOrderDetail
                            {
-                               Quanitity = t.Quanitity
+                               StockedQty = t.StockedQty
                            }).ToList(),
                            SalesOrderDetails = m.SalesOrderDetails.Where(so => so.Status == (int)SalesOrderStatus.Completed).Select(t => new Contract.Models.Sales.SalesOrderDetails
                            {
-                               OrderQty = t.OrderQty
+                               SoldQty = t.SoldQty
                            }).ToList()
                        })
                        .FirstOrDefault(),
 
-                           //TODO
-                           Sizes = x.StockGroups.Where(g => g.SizeId == g.Size.SizeId).Select(t => new Models.Sizes { SizeId = t.SizeId, Name = t.Size.Name }).ToList(),
+                       //TODO
+                       Sizes = x.StockGroups.Where(g => g.SizeId == g.Size.SizeId).Select(t => new Models.Sizes { SizeId = t.SizeId, Name = t.Size.Name }).ToList(),
                        Brands = x.StockGroups.Where(g => g.BrandId == g.Brand.BrandId).Select(p => new Models.Brands { BrandId = p.BrandId, Name = p.Brand.Name }).ToList(),
                        MaterialTypes = x.StockGroups.Where(g => g.MaterialTypeId == g.MaterialType.MaterialTypeId).Select(p => new Models.MaterialTypes { MaterialTypeId = p.MaterialTypeId, Name = p.MaterialType.Name }).ToList(),
                        Colors = x.StockGroups.Where(g => g.ColorId == g.Color.ColorId).Select(p => new Models.Colors { ColorId = p.ColorId, Name = p.Color.Name }).ToList(),
                        Grades = x.StockGroups.Where(g => g.GradeId == g.Grade.GradeId).Select(p => new Models.Grades { GradeId = p.GradeId, Name = p.Grade.Name }).ToList(),
 
-                           //Sizes = x.StockGroups.GroupBy(g => new { g.SizeId, g.Size.Name }).Select(t => new Models.Sizes { SizeId = t.Key.SizeId, Name = t.Key.Name }).OrderBy(o => o.Name).ToList(),
-                           //Brands = x.StockGroups.GroupBy(g => g.BrandId).Select(p => p.First()).Select(p => new Models.Brands { BrandId = p.BrandId, Name = p.Brand.Name }).ToList(),
-                           //MaterialTypes = x.StockGroups.GroupBy(g => g.MaterialTypeId).Select(p => p.First()).Select(p => new Models.MaterialTypes { MaterialTypeId = p.MaterialTypeId, Name = p.MaterialType.Name }).ToList(),
-                           //Colors = x.StockGroups.GroupBy(g => g.ColorId).Select(p => p.First()).Select(p => new Models.Colors { ColorId = p.ColorId, Name = p.Color.Name }).ToList(),
-                           //Grades = x.StockGroups.GroupBy(g => g.GradeId).Select(p => p.First()).Select(p => new Models.Grades { GradeId = p.GradeId, Name = p.Grade.Name }).ToList(),
-                       });
+                       //Sizes = x.StockGroups.GroupBy(g => new { g.SizeId, g.Size.Name }).Select(t => new Models.Sizes { SizeId = t.Key.SizeId, Name = t.Key.Name }).OrderBy(o => o.Name).ToList(),
+                       //Brands = x.StockGroups.GroupBy(g => g.BrandId).Select(p => p.First()).Select(p => new Models.Brands { BrandId = p.BrandId, Name = p.Brand.Name }).ToList(),
+                       //MaterialTypes = x.StockGroups.GroupBy(g => g.MaterialTypeId).Select(p => p.First()).Select(p => new Models.MaterialTypes { MaterialTypeId = p.MaterialTypeId, Name = p.MaterialType.Name }).ToList(),
+                       //Colors = x.StockGroups.GroupBy(g => g.ColorId).Select(p => p.First()).Select(p => new Models.Colors { ColorId = p.ColorId, Name = p.Color.Name }).ToList(),
+                       //Grades = x.StockGroups.GroupBy(g => g.GradeId).Select(p => p.First()).Select(p => new Models.Grades { GradeId = p.GradeId, Name = p.Grade.Name }).ToList(),
+                   });
 
                 var sql = query.ToQueryString();
                 var result = await query.FirstOrDefaultAsync();
@@ -193,11 +194,11 @@ namespace Sve.Service.Impl.Product
                     Sgst = x.Sgst,
                     PurchaseOrderDetails = x.PurchaseOrderDetails.Select(t => new PurchasingModels.PurchaseOrderDetail
                     {
-                        Quanitity = t.Quanitity
+                        StockedQty = t.StockedQty
                     }).ToList(),
                     SalesOrderDetails = x.SalesOrderDetails.Select(t => new Sve.Contract.Models.Sales.SalesOrderDetails
                     {
-                        OrderQty = t.OrderQty
+                        SoldQty = t.SoldQty
                     }).ToList()
                 }).AsQueryable();
             var sql = query.ToSql();

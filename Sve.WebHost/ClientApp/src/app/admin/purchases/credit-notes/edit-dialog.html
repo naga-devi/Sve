@@ -1,0 +1,82 @@
+﻿<form [formGroup]="form" (ngSubmit)="issueCreditNote()" autocomplete="off">
+    <div class="p-1">
+        <mat-dialog-content>
+            <mat-card>
+                <div fxLayout="row wrap" fxLayoutAlign="space-between center" class="w-100 p-2">
+                    <h2>{{data.order.companyName}} Purchase Order</h2>
+                    <button mat-raised-button color="warn" type="button" mat-dialog-close>Close</button>
+                </div>
+                <mat-divider></mat-divider>
+                <mat-card-content>
+                    <div class="mat-table admin-table">
+                        <div class="mat-header-row">
+                            <div class="mat-header-cell">Invoice#</div>
+                            <div class="mat-header-cell">Company Name</div>
+                            <div class="mat-header-cell">Contact No.</div>
+                            <div class="mat-header-cell">Purchase Date</div>
+                            <div class="mat-header-cell">Total</div>
+                        </div>
+                        <div class="mat-row">
+                            <div class="mat-cell"><span class="order">#{{data.order.invoiceNo}}</span></div>
+                            <div class="mat-cell">{{data.order?.companyName}}</div>
+                            <div class="mat-cell">{{data.order?.phoneNo}}</div>
+                            <div class="mat-cell">{{data.order.purchaseDate}}</div>
+                            <div class="mat-cell"><strong>₹{{data.order.grandTotal}}</strong> for
+                                <strong>{{data.order.stockedQty}}</strong> items
+                            </div>
+                        </div>
+                    </div>
+                </mat-card-content>
+                <div fxLayout="row wrap" fxLayoutAlign="space-between center" class="w-100 p-2">
+                    <h2>Credit Note Issued Details</h2>
+                </div>
+                <div fxLayout="row wrap">
+                    <div fxFlex="100" class="px-2">
+                        <div fxLayout="row wrap">
+                            <div fxFlex="100" fxFlex.gt-sm="25" class="px-1">
+                                <mat-form-field appearance="outline" class="w-100">
+                                    <mat-label>Current Balance</mat-label>
+                                    <input type="number" placeholder="0" readonly matInput
+                                        formControlName="currentBalance">
+                                </mat-form-field>
+                            </div>
+                            <div fxFlex="100" fxFlex.gt-sm="25" class="px-1">
+                                <mat-form-field appearance="outline" class="w-100">
+                                    <mat-label>Credit Issue Date</mat-label>
+                                    <input matInput [matDatepicker]="issueDate" readonly placeholder="Issue Date"
+                                        formControlName="issueDate">
+                                    <mat-datepicker-toggle matSuffix [for]="issueDate"></mat-datepicker-toggle>
+                                    <mat-datepicker #issueDate></mat-datepicker>
+                                    <mat-error *ngIf="form.controls.issueDate.errors?.required">
+                                        Issue date is required
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div fxFlex="100" fxFlex.gt-sm="25" class="px-1">
+                                <mat-form-field appearance="outline" class="w-100">
+                                    <mat-label>Discount</mat-label>
+                                    <input type="number" placeholder="0" min="1" matInput formControlName="discount">
+                                    <mat-error *ngIf="form.controls.discount.errors?.required">
+                                        Discount is required
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div fxFlex="100" fxFlex.gt-sm="100" class="px-1">
+                                <mat-form-field appearance="outline" class="w-100">
+                                    <mat-label>Remarks</mat-label>
+                                    <input matInput formControlName="remarks" placeholder="Enter remarks">
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <mat-card-footer>
+                    <div fxLayout="row wrap" fxLayoutAlign="space-between center" class="w-100 p-2">
+                        <button mat-raised-button color="warn" type="button" mat-dialog-close>Cancel</button>
+                        <button mat-raised-button color="primary" type="button" (click)="issueCreditNote()">Save</button>
+                    </div>
+                </mat-card-footer>
+            </mat-card>
+        </mat-dialog-content>
+    </div>
+</form>

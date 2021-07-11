@@ -140,10 +140,9 @@
 
             entity.Property(e => e.TinNo)
                 .IsRequired()
-                .HasMaxLength(50);
+                .HasMaxLength(30);
 
-            entity.Property(e => e.ZipCode)
-                .HasMaxLength(20);
+            entity.Property(e => e.ZipCode).HasMaxLength(20);
 
             base.Configure(entity);
         }

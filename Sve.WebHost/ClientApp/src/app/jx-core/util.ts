@@ -183,7 +183,7 @@ export function toServerDate(date: any = new Date()): string {
 	let _date = new Date();
 	if (date && typeof date === "string") {
 		let d = date.split('-');
-		_date = new Date(`${d[1]}-${d[0]}-${d[2]}`);
+		_date = new Date(`${d[0]}-${d[1]}-${d[2]}`);
 	} else {
 		_date =
 			date === undefined || date === null ? new Date() : new Date(date);

@@ -56,6 +56,9 @@
             services.AddTransient<Contract.Interface.Purchasing.IOrderHeaderService, Impl.Purchasing.OrderHeaderService>();
             services.AddTransient<Contract.Interface.Purchasing.IShipmentsService, Impl.Purchasing.ShipmentsService>();
             services.AddTransient<Contract.Interface.Purchasing.IVendorsService, Impl.Purchasing.VendorsService>();
+            services.AddTransient<Contract.Interface.Purchasing.ICreditNotesService, Impl.Purchasing.CreditNotesService>();
+            services.AddTransient<Contract.Interface.Purchasing.ICreditNotesInOrdersService, Impl.Purchasing.CreditNotesInOrdersService>();
+            services.AddTransient<Contract.Interface.Purchasing.IPurchaseReturnsService, Impl.Purchasing.PurchaseReturnsService>();
             services.AddTransient<Contract.Interface.Sales.ICustomersService, Impl.Sales.CustomersService>();
             services.AddTransient<Contract.Interface.Sales.IOrderDetailService, Impl.Sales.OrderDetailService>();
             services.AddTransient<Contract.Interface.Sales.IOrderHeaderService, Impl.Sales.OrderHeaderService>();

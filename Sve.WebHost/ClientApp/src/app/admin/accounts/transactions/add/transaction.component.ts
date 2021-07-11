@@ -162,4 +162,7 @@ export class NewTransactionComponent extends JxBaseComponent implements OnInit {
         }
       );
   }
+  openCouponDialog(e:any){
+    
+  }
 }

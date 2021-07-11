@@ -1,0 +1,55 @@
+﻿<div class="p-1">
+    <mat-card class="p-0">
+        <div fxLayout="row wrap" fxLayoutAlign="space-between center" class="w-100 p-2">
+            <div fxFlex="100%">
+                <div class="user-search" name="searchform" autocomplete="off">
+                    <mat-form-field floatLabel="auto" hideRequiredMarker appearance="outline" class="user-search-input">
+                        <input matInput type="number" placeholder="Search by Return ID..." (keydown.enter)="searchByOrderNo($event)" name="search">
+                        <!--<button mat-mini-fab matSuffix color="primary" aria-label="search">
+                        <mat-icon>search</mat-icon>
+                    </button>-->
+                    </mat-form-field>
+                </div>
+
+            </div>
+            <!--<div fxFlex="20%">
+            <button mat-flat-button color="primary" type="button">Search</button>
+        </div>-->
+        </div>
+        <mat-divider></mat-divider>
+        <!-- <div fxLayout="row wrap" fxLayoutAlign="space-between center" class="w-100 p-2">
+            <h2>Orders List</h2>
+            <a [routerLink]="['/admin/purchases/add-purchase']" mat-raised-button color="primary">
+                Add Orders
+            </a>
+        </div> -->
+        <div class="mat-table admin-table" matSort>
+            <div class="mat-header-row">
+                <div class="mat-header-cell">Invoice#</div>
+                <div class="mat-header-cell" mat-sort-header="companyName">Company Name</div>
+                <div class="mat-header-cell" mat-sort-header="ReturnDate">Returned Date</div>
+                <div class="mat-header-cell">Total Amount</div>
+                <div class="mat-header-cell">RoundOff Amount</div>
+                <div class="mat-header-cell">Grand Total</div>
+            </div>
+            <div *ngFor="let order of matTable.data | paginate: { itemsPerPage: matTable.count, currentPage: matTable.page, totalItems: matTable.totalItems }" class="mat-row">
+                <div class="mat-cell">
+                    <a href="javascript:void(0)" class="primary-text">#{{order?.purchaseOrder?.invoiceNo}}</a>
+                </div>
+                <div class="mat-cell">{{order?.purchaseOrder?.vendor?.companyName}}</div>
+                <div class="mat-cell">{{order.returnDate | date}}</div>
+                <div class="mat-cell">{{order.totalAmount}}</div>
+                <div class="mat-cell">{{order.roundOff}}</div>
+                <div class="mat-cell">{{order.totalAmount}}</div>
+            </div>
+        </div>
+        <div class="table-empty-row" *ngIf="matTable.data && matTable.data.length === 0 ">No records found</div>
+    </mat-card>
+    <div *ngIf="matTable.data.length > 0" fxLayout="row wrap">
+        <div fxFlex="100">
+            <mat-card class="p-0 text-center">
+                <pagination-controls class="product-pagination" autoHide="true" maxSize="10" (pageChange)="onPageChanged($event)"></pagination-controls>
+            </mat-card>
+        </div>
+    </div>
+</div>

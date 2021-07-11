@@ -27,6 +27,8 @@
 
             entity.Property(e => e.Discount).HasColumnType("decimal(19, 4)");
 
+            entity.Property(e => e.Igst).HasColumnType("decimal(19, 4)");
+
             entity.Property(e => e.MaterialTypeId);//.HasComment("UPVC/CPVC");
 
             entity.Property(e => e.ModifiedBy).HasMaxLength(50);
@@ -36,16 +38,21 @@
             entity.Property(e => e.Mrp)
                 .HasColumnName("MRP")
                 .HasColumnType("decimal(19, 4)");
+                //.HasComputedColumnSql("(isnull((([NetPrice]+[Cgst])+[Sgst])+[Igst],(0.0)))");
 
             entity.Property(e => e.NetPrice).HasColumnType("decimal(19, 4)");
 
-            entity.Property(e => e.SellPrice).HasColumnType("decimal(19, 4)");
+            entity.Property(e => e.SellPrice)
+                .HasColumnType("decimal(19, 4)");
+                //.HasComputedColumnSql("(isnull((([NetPrice]+[Cgst])+[Sgst])+[Igst],(0.0))-(isnull((([NetPrice]+[Cgst])+[Sgst])+[Igst],(0.0))*[Discount])/(100))");
 
             entity.Property(e => e.Sgst).HasColumnType("decimal(19, 4)");
 
             entity.Property(e => e.Status).HasDefaultValueSql("((1))");
 
-            entity.Property(e => e.TaxAmount).HasColumnType("decimal(19, 4)");
+            entity.Property(e => e.TaxAmount)
+                .HasColumnType("decimal(19, 4)");
+                //.HasComputedColumnSql("(isnull(([Cgst]+[Sgst])+[Igst],(0.0)))");
 
             entity.HasOne(d => d.Brand)
                 .WithMany(p => p.StockGroups)

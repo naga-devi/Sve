@@ -11,13 +11,17 @@
         {
             entity.ToTable("Sales_OrderDetails");
 
-            entity.Property(e => e.OrderQty).HasColumnType("smallint");
-
             entity.Property(e => e.CgstAmount).HasColumnType("decimal(19, 4)");
 
             entity.Property(e => e.IgstAmount).HasColumnType("decimal(19, 4)");
 
+            entity.Property(e => e.RejectedQty).HasColumnType("decimal(19, 4)");
+
             entity.Property(e => e.SgstAmount).HasColumnType("decimal(19, 4)");
+
+            entity.Property(e => e.SoldQty)
+                .HasColumnType("decimal(20, 4)")
+                .HasComputedColumnSql("(isnull([OrderQty]-[RejectedQty],(0.00)))");
 
             entity.Property(e => e.Status).HasDefaultValueSql("((1))");
 

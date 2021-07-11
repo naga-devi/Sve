@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-    apiUrl: 'http://sve.eschoolshub.com/api/',
-    loginUrl: "sign-in",
-    authTokenKey: "npr121212",
+  apiUrl: "http://10.0.0.103/api/",
+  loginUrl: "sign-in",
+  authTokenKey: "sve10072021",
 };

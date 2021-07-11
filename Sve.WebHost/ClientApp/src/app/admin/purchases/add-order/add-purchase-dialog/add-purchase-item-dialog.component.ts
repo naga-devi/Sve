@@ -1,14 +1,11 @@
 import {
   Component,
-  ChangeDetectorRef,
-  ChangeDetectionStrategy,
   OnInit,
   Inject,
 } from "@angular/core";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { AppService } from "../../../../app.service";
-import { Utilities } from "../../../../jx-core";
 
 @Component({
   selector: "app-purchases-orders-add-purchase-item",
@@ -45,7 +42,7 @@ export class AddPurchaseItemDialogComponent implements OnInit {
       gradeId: [1],
       unitMeasureId: [null, Validators.required],
       unitPrice: [null, Validators.required],
-      quanitity: [null, Validators.required],
+      receivedQty: [null, Validators.required],
       mrp: [null, Validators.required],
       totalCgstAmount: [null, Validators.required],
       totalSgstAmount: [null, Validators.required],
@@ -58,10 +55,12 @@ export class AddPurchaseItemDialogComponent implements OnInit {
     });
 
     if (this.data.purchase) {
+      this.data.purchase.totalAmount = this.data.purchase.totalAmount || 0;
+      this.data.purchase.subtotal = this.data.purchase.subtotal || 0;
       this.form.patchValue(this.data.purchase);
     }
     // else{
-    //     this.data.purchase={"id":0,"categoryId":10,"productId":43,"materialTypeId":10,"sizeId":27,"brandId":9,"colorId":3,"gradeId":3,"unitMeasureId":3,"unitPrice":26,"quanitity":360,"mrp":120,"totalCgstAmount":825.55,"totalSgstAmount":825.55,"taxableAmount":9172.8,"cgstAmount":2.2932,"sgstAmount":2.2932,"totalAmount":30.066399999999998,"discount":2,"subtotal":25.48};
+    //     this.data.purchase={"id":0,"categoryId":10,"productId":43,"materialTypeId":10,"sizeId":27,"brandId":9,"colorId":3,"gradeId":3,"unitMeasureId":3,"unitPrice":26,"receivedQty":360,"mrp":120,"totalCgstAmount":825.55,"totalSgstAmount":825.55,"taxableAmount":9172.8,"cgstAmount":2.2932,"sgstAmount":2.2932,"totalAmount":30.066399999999998,"discount":2,"subtotal":25.48};
     //     this.form.patchValue(this.data.purchase);
     // }
   }
@@ -79,7 +78,7 @@ export class AddPurchaseItemDialogComponent implements OnInit {
 
   updatePrice() {
     const unitPrice = Number(this.form.controls.unitPrice.value);
-    const quanitity = Number(this.form.controls.quanitity.value);
+    const receivedQty = Number(this.form.controls.receivedQty.value);
     const discount = Number(this.form.controls.discount.value);
     let subtotal = 0;
     const selectedProductId = parseInt(this.form.controls.productId.value, 0);
@@ -105,13 +104,13 @@ export class AddPurchaseItemDialogComponent implements OnInit {
       this.form.controls["totalAmount"].setValue(Number(totalAmount).toFixed(2));
 
       this.form.controls["totalCgstAmount"].setValue(
-        Number(cgst * quanitity).toFixed(2)
+        Number(cgst * receivedQty).toFixed(2)
       );
       this.form.controls["totalSgstAmount"].setValue(
-        Number(sgst * quanitity).toFixed(2)
+        Number(sgst * receivedQty).toFixed(2)
       );
       this.form.controls["taxableAmount"].setValue(
-        Number(subtotal * quanitity).toFixed(2)
+        Number(subtotal * receivedQty).toFixed(2)
       );
     }
   }

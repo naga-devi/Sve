@@ -1,6 +1,6 @@
 namespace Sve.Service.Impl.Accounts
 {
-	using AutoMapper;
+    using AutoMapper;
     using Microsoft.EntityFrameworkCore;
     using Sve.Contract.Interface.Accounts;
     using Sve.Service.Data;
@@ -28,24 +28,62 @@ namespace Sve.Service.Impl.Accounts
             _mapper = mapper;
         }
 
-		public async Task<(int? totalCount, List<Models.Transactions> items)> GetByExpressionAsync(int index, int size, string sortColumn, bool isDescending, Models.Transactions filter = null, CancellationToken cancellationToken = default)
+        public async Task<(int? totalCount, List<Models.Transactions> items)> GetByExpressionAsync(int index, int size, string sortColumn, bool isDescending, Models.Transactions filter = null, CancellationToken cancellationToken = default)
         {
             using (var dbContext = _dbContext())
             {
-                var result = await dbContext.GetAsQuerable<Domain.Transaction>()
+                var query = dbContext.GetAsQuerable<Domain.Transaction>();
+
+                if (filter != null)
+                {
+                    query = query.If(filter.CustomerId.IsGreaterThanZero(), q => q.Where(x => x.CustomerId == filter.CustomerId));
+                    query = query.If(filter.TransactionId > 0, q => q.Where(x => x.TransactionId == filter.TransactionId));
+                }
+
+                var result = await query
+                    .Select(x => new Models.Transactions
+                    {
+                        TransactionId = x.TransactionId,
+                        AccountTypeId = x.AccountTypeId,
+                        AccountType = new Models.AccountType
+                        {
+                            Name = x.AccountType.Name
+                        },
+                        CustomerId = x.CustomerId,
+                        Customer = new Models.Customer
+                        {
+                            CompanyName = x.Customer.CompanyName,
+                            TinNo = x.Customer.TinNo
+                        },
+                        PaidAmount = x.PaidAmount,
+                        PaidDate = x.PaidDate,
+                        PayModeId = x.PayModeId,
+                        PayMode = new Models.PayMode
+                        {
+                            Name = x.PayMode.Name
+                        },
+                        VoucherTypeId = x.VoucherTypeId,
+                        VoucherType = new Models.VoucherType
+                        {
+                            Name = x.VoucherType.Name
+                        },
+                        Remarks = x.Remarks,
+                        Status = x.Status,
+                        CreatedOn = x.CreatedOn
+                    })
                     .AsNoTracking()
                     .GetPaginateAsync(index, size, sortColumn, isDescending, cancellationToken);
 
-                if((bool)result?.Items?.HasItems())
+                if ((bool)result?.Items?.HasItems())
                 {
-                    return (result?.TotalCount, _mapper.Map<List<Models.Transactions>>( result?.Items?.ToList()));
+                    return (result?.TotalCount, _mapper.Map<List<Models.Transactions>>(result?.Items?.ToList()));
                 }
             }
 
             return (0, null);
         }
 
-		public async Task<Models.Transactions> GetByIdAsync(int transactionId, bool? disbaleTracking = false, CancellationToken cancellationToken = default)
+        public async Task<Models.Transactions> GetByIdAsync(int transactionId, bool? disbaleTracking = false, CancellationToken cancellationToken = default)
         {
             using var dbContext = _dbContext();
             var query = dbContext.GetAsQuerable<Domain.Transaction>().Where(x => x.TransactionId == transactionId);
@@ -97,7 +135,7 @@ namespace Sve.Service.Impl.Accounts
                 await dbContext.SaveChangesAsync(cancellationToken);
                 result.NewId = entityToAdd.TransactionId;
 
-                if(entityToAdd.TransactionId > 0)
+                if (entityToAdd.TransactionId > 0)
                 {
                     var detailsToAdd = _mapper.Map<Domain.TransactionDetail>(transactionDetail);
                     dbContext.Add(detailsToAdd);
@@ -149,7 +187,7 @@ namespace Sve.Service.Impl.Accounts
             }
 
             return result;
-        }        
+        }
 
         public async Task<ResponseResult> DeleteByIdAsync(long[] transactionIds, CancellationToken cancellationToken = default)
         {

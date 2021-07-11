@@ -21,7 +21,7 @@
                         <div class="mat-cell">{{data.order?.phoneNo}}</div>
                         <div class="mat-cell">{{data.order.purchaseDate}}</div>
                         <div class="mat-cell"><strong>₹{{data.order.grandTotal}}</strong> for
-                            <strong>{{data.order.quantity}}</strong> items</div>
+                            <strong>{{data.order.stockedQty}}</strong> items</div>
                     </div>
                 </div>
             </mat-card-content>
@@ -58,7 +58,7 @@
                         <div class="mat-cell">{{item?.purchase?.unitPrice}}</div>
                         <div class="mat-cell">{{item?.purchase?.cgstAmount}}</div>
                         <div class="mat-cell">{{item?.purchase?.sgstAmount}}</div>
-                        <div class="mat-cell">{{item?.purchase?.quanitity}}</div>
+                        <div class="mat-cell">{{item?.purchase?.stockedQty}}</div>
                         <div class="mat-cell">{{item?.purchase?.subTotal | number : '1.2-2'}}</div>
                     </div>
                 </div>

@@ -16,5 +16,12 @@ namespace Sve.Contract.Models.Accounts
 		public DateTime? PaidDate { get; set; }
 		public string Remarks { get; set; }
 		public short? Status { get; set; }
+
+		public virtual AccountType AccountType { get; set; }
+		public virtual Customer Customer { get; set; }
+		public virtual PayMode PayMode { get; set; }
+		public virtual VoucherType VoucherType { get; set; }
+		public virtual ICollection<TransactionDetail> TransactionDetails { get; set; }
+        public DateTime? CreatedOn { get; set; }
     }
 }

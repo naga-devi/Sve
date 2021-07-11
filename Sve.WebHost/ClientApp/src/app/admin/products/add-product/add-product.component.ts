@@ -109,7 +109,7 @@ export class AddProductComponent implements OnInit {
         product.addedImages = newImages;
         product.deletedImages = this.deletedImageIds;
         //console.log(product);
-        this.appService.postBy('/api/product/productdetails/save', product).subscribe(
+        this.appService.postBy('product/productdetails/save', product).subscribe(
             (response: ResponseModel) => {
                 if (response.code === ResponseStatus.Success) {
                     this.alertService.success(response.message);

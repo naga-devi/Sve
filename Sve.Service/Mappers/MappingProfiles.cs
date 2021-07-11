@@ -62,6 +62,12 @@
             CreateMap<Domain.Product.ProductMaterialTypes, Models.Product.MaterialTypes>();
             CreateMap<Models.Product.Sizes, Domain.Product.ProductSizes>();
             CreateMap<Domain.Product.ProductSizes, Models.Product.Sizes>();
+
+            CreateMap<Models.Purchasing.CreditNotes, Domain.Purchasing.CreditNotes>();
+            CreateMap<Domain.Purchasing.CreditNotes, Models.Purchasing.CreditNotes>();
+            CreateMap<Models.Purchasing.CreditNotesInOrders, Domain.Purchasing.CreditNotesInOrders>();
+            CreateMap<Domain.Purchasing.CreditNotesInOrders, Models.Purchasing.CreditNotesInOrders>();
+
             CreateMap<Models.Purchasing.PurchaseOrderDetail, Domain.Purchasing.PurchaseOrderDetail>();
             CreateMap<Domain.Purchasing.PurchaseOrderDetail, Models.Purchasing.PurchaseOrderDetail>();
             CreateMap<Models.Purchasing.PurchaseOrderHeader, Domain.Purchasing.PurchaseOrderHeader>();

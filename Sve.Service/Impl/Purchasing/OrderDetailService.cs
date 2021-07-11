@@ -68,7 +68,10 @@ namespace Sve.Service.Impl.Purchasing
                     },
                     PurchaseOrderDetails = x.PurchaseOrderDetails.Select(p => new Models.PurchaseOrderDetail
                     {
-                        Quanitity = p.Quanitity,
+                        Id= p.Id,
+                        StockedQty = p.StockedQty,
+                        ReceivedQty = p.ReceivedQty,
+                        RejectedQty = p.RejectedQty,
                         UnitPrice = p.UnitPrice,
                         Discount = p.Discount,
                         CgstAmount = p.CgstAmount,

@@ -9,6 +9,8 @@ namespace Sve.Service.Domain.Purchasing
         public PurchaseOrderHeader()
         {
             OrderDetails = new HashSet<PurchaseOrderDetail>();
+            CreditNotesInOrders = new HashSet<CreditNotesInOrders>();
+            PurchaseReturns = new HashSet<PurchaseReturns>();
         }
 
         public int VendorId { get; set; }
@@ -29,6 +31,8 @@ namespace Sve.Service.Domain.Purchasing
         public byte Status { get; set; }
 
         public virtual Vendors Vendor { get; set; }
+        public virtual ICollection<CreditNotesInOrders> CreditNotesInOrders { get; set; }
         public virtual ICollection<PurchaseOrderDetail> OrderDetails { get; set; }
+        public virtual ICollection<PurchaseReturns> PurchaseReturns { get; set; }
     }
 }

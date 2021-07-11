@@ -65,7 +65,7 @@ namespace Sve.Service.Impl.Product
                         },
                         PurchaseOrderDetails = x.PurchaseOrderDetails.Select(t => new PurchaseModels.PurchaseOrderDetail
                         {
-                            Quanitity = t.Quanitity
+                            StockedQty = t.StockedQty
                         }).ToList()
                     })
                     .AsNoTracking()

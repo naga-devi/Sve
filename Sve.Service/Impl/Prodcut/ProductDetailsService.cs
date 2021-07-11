@@ -91,7 +91,7 @@ namespace Sve.Service.Impl.Product
                         Discount = m.Discount,
                     })
                    .FirstOrDefault(),
-                    StockedQuantity = x.StockGroups.SelectMany(s => s.PurchaseOrderDetails).Sum(t => t.Quanitity),
+                    StockedQuantity = x.StockGroups.SelectMany(s => s.PurchaseOrderDetails).Sum(t => t.ReceivedQty),
                     SoldQuantity = x.StockGroups.SelectMany(s => s.SalesOrderDetails.Where(m => x.Status == (int)SalesOrderStatus.Completed)).Sum(t => t.OrderQty)
                 })
                 .AsNoTracking();
@@ -308,7 +308,7 @@ namespace Sve.Service.Impl.Product
                             SellPrice = m.SellPrice
                         })
                        .FirstOrDefault(),
-                        StockedQuantity = x.StockGroups.Sum(s => s.PurchaseOrderDetails.Sum(t => t.Quanitity)),
+                        StockedQuantity = x.StockGroups.Sum(s => s.PurchaseOrderDetails.Sum(t => t.ReceivedQty)),
                         SoldQuantity = x.StockGroups.Sum(s => s.SalesOrderDetails.Where(m => x.Status == (int)SalesOrderStatus.Completed).Sum(t => t.OrderQty))
                     })
                     .AsNoTracking()
@@ -361,7 +361,7 @@ namespace Sve.Service.Impl.Product
                     m.Mrp,
                     m.Discount,
                     m.SellPrice,
-                    StockedQuantity = m.PurchaseOrderDetails.Sum(t => t.Quanitity),
+                    StockedQuantity = m.PurchaseOrderDetails.Sum(t => t.ReceivedQty),
                     SoldQuantity = m.SalesOrderDetails.Where(x => x.Status == (int)SalesOrderStatus.Completed).Sum(t => t.OrderQty)
                 })
                .AsQueryable()

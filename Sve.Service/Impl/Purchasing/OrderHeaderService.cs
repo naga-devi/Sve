@@ -56,7 +56,7 @@ namespace Sve.Service.Impl.Purchasing
                     CompanyName = x.Vendor.CompanyName,
                     PhoneNo = x.Vendor.PhoneNo
                 },
-                PurchaseOrderDetail = x.OrderDetails.Select(m => new Models.PurchaseOrderDetail { Quanitity = m.Quanitity }).ToList()
+                PurchaseOrderDetail = x.OrderDetails.Select(m => new Models.PurchaseOrderDetail { StockedQty = m.StockedQty }).ToList()
             })
             .AsNoTracking()
             .GetPaginateAsync(index, size, sortColumn, isDescending, cancellationToken);
@@ -98,7 +98,9 @@ namespace Sve.Service.Impl.Purchasing
                 PurchaseOrderDetail = x.OrderDetails.Select(p => new Models.PurchaseOrderDetail
                 {
                     Id = p.Id,
-                    Quanitity = p.Quanitity,
+                    ReceivedQty = p.ReceivedQty,
+                    RejectedQty = p.RejectedQty,
+                    StockedQty = p.StockedQty,
                     UnitPrice = p.UnitPrice,
                     Discount = p.Discount,
                     CgstAmount = p.CgstAmount,
@@ -249,13 +251,11 @@ namespace Sve.Service.Impl.Purchasing
 
                     if (stocksToAdd.Any(x => x.StockGroupId == 0))
                     {
-                        //stocksToAdd.ForEach(t =>
-                        //{
-                        //    dbContext.Add(t);
-                        //});
-
-                        dbContext.AddRange(stocksToAdd.Where(x => x.StockGroupId == 0).ToList().ToArray());
-                        await dbContext.SaveChangesAsync(cancellationToken);
+                        if (stocksToAdd.HasItems())
+                        {
+                            dbContext.AddRange(stocksToAdd.Where(x => x.StockGroupId == 0).ToList().ToArray());
+                            await dbContext.SaveChangesAsync(cancellationToken);
+                        }
                     }
 
                     //Tax and grandtotal calculations
@@ -298,10 +298,10 @@ namespace Sve.Service.Impl.Purchasing
                         {
                             PurchaseOrderId = purchaseOrderHeaderToAdd.PurchaseOrderId,
                             StockGroupId = (int)stocksToAdd.FirstOrDefault(m => x.ProductId == m.ProductId && x.MaterialTypeId == m.MaterialTypeId && x.SizeId == m.SizeId && x.BrandId == m.BrandId)?.StockGroupId,
-                            Quanitity = x.Quanitity,
+                            ReceivedQty = x.ReceivedQty,
                             Mrp = x.Mrp,
                             UnitPrice = x.UnitPrice,
-                            Discount = x.Discount,
+                            Discount = x.Discount ?? 0,
                             CgstAmount = x.CgstAmount,
                             SgstAmount = x.SgstAmount,
                             IgstAmount = 0,
@@ -314,7 +314,8 @@ namespace Sve.Service.Impl.Purchasing
                         //    dbContext.Add(purchase);
                         //});
 
-                        dbContext.AddRange(purchases.ToArray());
+                        if (purchases.HasItems())
+                            dbContext.AddRange(purchases.ToArray());
 
                         await dbContext.SaveChangesAsync(cancellationToken);
                         scope.Complete();
@@ -343,8 +344,10 @@ namespace Sve.Service.Impl.Purchasing
                 if (existingDetails != null && existingDetails.Any())
                 {
                     var detailsToDeleted = existingDetails.Where(e => !request.Purchases.Any(n => n.Id == e.Id)).ToList();
-                    deleteIds = detailsToDeleted.Select(x => (int)x.Id).ToArray();
-                    dbContext.RemoveByWhere<Domain.PurchaseOrderDetail>(x => deleteIds.Contains(x.Id));
+                    deleteIds = detailsToDeleted.Select(x => x.Id).ToArray();
+
+                    if (deleteIds.HasItems())
+                        dbContext.RemoveByWhere<Domain.PurchaseOrderDetail>(x => deleteIds.Contains(x.Id));
 
                     request.Purchases = request.Purchases.Where(x => !deleteIds.Contains((int)x.Id)).ToList();
                 }
@@ -423,7 +426,7 @@ namespace Sve.Service.Impl.Purchasing
                         NetPrice = x.UnitPrice,
                         Cgst = x.CgstAmount,
                         Sgst = x.CgstAmount,
-                        TaxAmount = Math.Round(x.CgstAmount + x.SgstAmount,2), //CalculateTax(requestedProductTaxSlabs, x.UnitPrice, x.ProductId)
+                        TaxAmount = Math.Round(x.CgstAmount + x.SgstAmount, 2), //CalculateTax(requestedProductTaxSlabs, x.UnitPrice, x.ProductId)
                         Mrp = Math.Round(x.UnitPrice + x.CgstAmount + x.SgstAmount, 2),
                         Discount = 0,
                         SellPrice = Math.Round((decimal)GetSellPrice(x.UnitPrice, x.CgstAmount, x.SgstAmount, 0), 2),
@@ -438,8 +441,12 @@ namespace Sve.Service.Impl.Purchasing
 
                     if (stocksToAdd.Any(x => x.StockGroupId == 0))
                     {
-                        dbContext.AddRange(stocksToAdd.Where(x => x.StockGroupId == 0).ToList().ToArray());
-                        await dbContext.SaveChangesAsync(cancellationToken);
+                        var stockToAddModel = stocksToAdd.Where(x => x.StockGroupId == 0).ToList().ToArray();
+                        if (stockToAddModel.HasItems())
+                        {
+                            dbContext.AddRange();
+                            await dbContext.SaveChangesAsync(cancellationToken);
+                        }
                     }
 
                     var roundOffAmount = request.Vendor.RoundOffAmount ?? 0;
@@ -471,10 +478,10 @@ namespace Sve.Service.Impl.Purchasing
                         {
                             PurchaseOrderId = orderToUpdate.PurchaseOrderId,
                             StockGroupId = (int)stocksToAdd.FirstOrDefault(m => x.ProductId == m.ProductId && x.MaterialTypeId == m.MaterialTypeId && x.SizeId == m.SizeId && x.BrandId == m.BrandId)?.StockGroupId,
-                            Quanitity = x.Quanitity,
+                            ReceivedQty = x.ReceivedQty,
                             Mrp = x.Mrp,
                             UnitPrice = x.UnitPrice,
-                            Discount = x.Discount,
+                            Discount = x.Discount ?? 0,
                             CgstAmount = x.CgstAmount,
                             SgstAmount = x.SgstAmount,
                             IgstAmount = 0,
@@ -482,7 +489,11 @@ namespace Sve.Service.Impl.Purchasing
                             Status = (int)EntityStatus.Active
                         }).ToList();
 
-                        dbContext.AddRange(detailsToAdd.ToArray());
+                        if (detailsToAdd.HasItems())
+                        {
+                            if (detailsToAdd.HasItems())
+                                dbContext.AddRange(detailsToAdd.ToArray());
+                        }
 
                         var detailsToUpdate = await dbContext.GetAsQuerable<Domain.PurchaseOrderDetail>().Where(x => x.PurchaseOrderId == request.Vendor.PurchaseOrderId).ToListAsync(cancellationToken: cancellationToken);
 
@@ -493,10 +504,10 @@ namespace Sve.Service.Impl.Purchasing
                                 var detail = request.Purchases.FirstOrDefault(x => x.Id == d.Id);
                                 if (detail != null)
                                 {
-                                    d.Quanitity = detail.Quanitity;
+                                    d.ReceivedQty = detail.ReceivedQty;
                                     d.Mrp = detail.Mrp;
                                     d.UnitPrice = detail.UnitPrice;
-                                    d.Discount = detail.Discount;
+                                    d.Discount = detail.Discount ?? 0;
                                     d.CgstAmount = detail.CgstAmount;
                                     d.SgstAmount = detail.SgstAmount;
                                     d.IgstAmount = 0;
@@ -504,7 +515,8 @@ namespace Sve.Service.Impl.Purchasing
                                 }
                             });
 
-                            dbContext.UpdateRange(detailsToUpdate.ToArray());
+                            if (detailsToUpdate.HasItems())
+                                dbContext.UpdateRange(detailsToUpdate.ToArray());
                         }
 
                         await dbContext.SaveChangesAsync(cancellationToken);
@@ -536,9 +548,11 @@ namespace Sve.Service.Impl.Purchasing
             {
                 using var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
                 using var dbContext = _dbContext();
-                dbContext.RemoveByWhere<Domain.PurchaseOrderDetail>(x => ids.Contains(x.PurchaseOrderId));
+                if (ids.HasItems())
+                    dbContext.RemoveByWhere<Domain.PurchaseOrderDetail>(x => ids.Contains(x.PurchaseOrderId));
 
-                dbContext.RemoveByWhere<Domain.PurchaseOrderHeader>(x => ids.Contains(x.PurchaseOrderId));
+                if (ids.HasItems())
+                    dbContext.RemoveByWhere<Domain.PurchaseOrderHeader>(x => ids.Contains(x.PurchaseOrderId));
 
                 await dbContext.SaveChangesAsync(cancellationToken);
                 scope.Complete();

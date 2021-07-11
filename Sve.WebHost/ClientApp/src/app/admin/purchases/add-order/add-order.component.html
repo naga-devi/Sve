@@ -174,13 +174,13 @@
                     <div class="mat-cell">{{ ( prerequisites?.grades | filterById : item.gradeId: 'gradeId')?.name }}</div>
                     <div class="mat-cell">{{ ( prerequisites?.colors | filterById : item.colorId: 'colorId')?.name }}</div>
                     <div class="mat-cell">{{ ( unitmeasures | filterById : item.unitMeasureId: 'unitMeasureId')?.name }}</div>
-                    <div class="mat-cell">{{item.quanitity}}</div>
+                    <div class="mat-cell">{{item.receivedQty}}</div>
                     <div class="mat-cell">{{item.mrp}}</div>
                     <div class="mat-cell">{{item.unitPrice}}</div>
                     <div class="mat-cell">{{item.totalCgstAmount}}</div>
                     <div class="mat-cell">{{item.totalSgstAmount}}</div>
                     <div class="mat-cell">{{item.taxableAmount}}</div>
-                    <!--<div class="mat-cell">{{item.unitPrice*item.quanitity | number : '1.2-2'}}</div>-->
+                    <!--<div class="mat-cell">{{item.unitPrice*item.receivedQty | number : '1.2-2'}}</div>-->
                     <div class="mat-cell">
                         <div class="p-1 actions">
                             <!-- <button mat-mini-fab color="primary" matTooltip="Edit" (click)="openAddItemDialog(item, rowIndex, true)">

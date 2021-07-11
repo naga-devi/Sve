@@ -100,7 +100,7 @@ export class AddPurchaseOrderComponent implements OnInit {
       phoneNo: [null, Validators.required],
       address: [null, Validators.required],
       invoiceNo: [null, Validators.required],
-      purchaseDate: [null, Validators.required],
+      purchaseDate: [new Date(), Validators.required],
       totalAmount: [null, Validators.required],
       discount: [null],
       netAmount: [null, Validators.required],

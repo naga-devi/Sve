@@ -1,0 +1,57 @@
+﻿<div class="p-1">
+    <mat-card class="p-0">
+        <div fxLayout="row wrap" fxLayoutAlign="space-between center" class="w-100 p-2">
+            <div fxFlex="100%">
+                <div class="user-search" name="searchform" autocomplete="off">
+                    <mat-form-field floatLabel="auto" hideRequiredMarker appearance="outline" class="user-search-input">
+                        <input matInput type="number" placeholder="Search by Transaction ID..." (keydown.enter)="searchByOrderNo($event)" name="search">
+                        <!--<button mat-mini-fab matSuffix color="primary" aria-label="search">
+                        <mat-icon>search</mat-icon>
+                    </button>-->
+                    </mat-form-field>
+                </div>
+
+            </div>
+            <!--<div fxFlex="20%">
+            <button mat-flat-button color="primary" type="button">Search</button>
+        </div>-->
+        </div>
+        <mat-divider></mat-divider>
+        <div fxLayout="row wrap" fxLayoutAlign="space-between center" class="w-100 p-2">
+            <h2>Transaction Details</h2>
+            <button mat-raised-button color="primary">
+                Add Payment/Voucher
+            </button>
+        </div>
+        <div class="mat-table admin-table" matSort>
+            <div class="mat-header-row">
+                <div class="mat-header-cell" mat-sort-header="TransactionId">Transaction#</div>
+                <div class="mat-header-cell" mat-sort-header="VoucherTypeId">Voucher Type</div>
+                <div class="mat-header-cell" mat-sort-header="CustomerId">Customer</div>
+                <div class="mat-header-cell" mat-sort-header="AccountTypeId">Account Type</div>
+                <div class="mat-header-cell" mat-sort-header="PayModeId">Pay Mode</div>
+                <div class="mat-header-cell">PaidAmount</div>
+                <div class="mat-header-cell" mat-sort-header="PaidDate">Paid Date</div>
+                <div class="mat-header-cell" mat-sort-header="CreatedOn">Created Date</div>
+            </div>
+            <div *ngFor="let x of matTable.data | paginate: { itemsPerPage: matTable.count, currentPage: matTable.page, totalItems: matTable.totalItems }" class="mat-row">
+                <div class="mat-cell"><a href="javascript:void(0)" class="primary-text">{{x.transactionId}}</a></div>
+                <div class="mat-cell">{{x?.voucherType?.name}}</div>
+                <div class="mat-cell">{{x?.customer?.companyName}}<small>({{x?.customer?.tinNo}})</small></div>
+                <div class="mat-cell">{{x?.accountType?.name}}</div>
+                <div class="mat-cell">{{x?.payMode?.name}}</div>
+                <div class="mat-cell">{{x.paidAmount}}</div>
+                <div class="mat-cell">{{x.paidDate | date}}</div>
+                <div class="mat-cell">{{x.createdOn | date}}</div>
+            </div>
+        </div>
+        <div class="table-empty-row" *ngIf="matTable.data && matTable.data.length === 0 ">No records found</div>
+    </mat-card>
+    <div *ngIf="matTable.data.length > 0" fxLayout="row wrap">
+        <div fxFlex="100">
+            <mat-card class="p-0 text-center">
+                <pagination-controls class="product-pagination" autoHide="true" maxSize="10" (pageChange)="onPageChanged($event)"></pagination-controls>
+            </mat-card>
+        </div>
+    </div>
+</div>

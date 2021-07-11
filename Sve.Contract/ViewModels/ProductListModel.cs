@@ -18,9 +18,9 @@ namespace Sve.Contract.ViewModels
         //public decimal? NewPrice { get; set; }
         //public decimal? Discount { get; set; }
 
-        public int? StockedQuantity { get; set; }
-        public int? SoldQuantity { get; set; }
-        public int? AvailibilityCount => (StockedQuantity ?? 0) - (SoldQuantity ?? 0);
+        public decimal StockedQuantity { get; set; }
+        public decimal SoldQuantity { get; set; }
+        public decimal? AvailibilityCount => StockedQuantity - SoldQuantity;
 
         public StockGroups StockItems { get; set; }
         public TaxSlabs TaxSlab { get; set; }

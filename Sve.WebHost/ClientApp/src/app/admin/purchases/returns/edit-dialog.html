@@ -1,0 +1,118 @@
+﻿<form [formGroup]="form" (ngSubmit)="onReturnSave()" autocomplete="off">
+    <div class="p-1">
+        <mat-dialog-content>
+            <mat-card>
+                <div fxLayout="row wrap" fxLayoutAlign="space-between center" class="w-100 p-2">
+                    <h2>{{data.order.companyName}} Purchase Order</h2>
+                    <button mat-raised-button color="warn" type="button" mat-dialog-close>Close</button>
+                </div>
+                <mat-divider></mat-divider>
+                <mat-card-content>
+                    <div class="mat-table admin-table">
+                        <div class="mat-header-row">
+                            <div class="mat-header-cell">Invoice#</div>
+                            <div class="mat-header-cell">Company Name</div>
+                            <div class="mat-header-cell">Contact No.</div>
+                            <div class="mat-header-cell">Purchase Date</div>
+                            <div class="mat-header-cell">Total</div>
+                        </div>
+                        <div class="mat-row">
+                            <div class="mat-cell"><span class="order">#{{data.order.invoiceNo}}</span></div>
+                            <div class="mat-cell">{{data.order?.companyName}}</div>
+                            <div class="mat-cell">{{data.order?.phoneNo}}</div>
+                            <div class="mat-cell">{{data.order.purchaseDate}}</div>
+                            <div class="mat-cell"><strong>₹{{data.order.grandTotal}}</strong> for
+                                <strong>{{data.order.stockedQty}}</strong> items
+                            </div>
+                        </div>
+                    </div>
+                </mat-card-content>
+                <div fxLayout="row wrap" fxLayoutAlign="space-between center" class="w-100 p-2">
+                    <h2>Purchased Items</h2>
+                </div>
+                <mat-divider></mat-divider>
+                <mat-card-content>
+                    <div class="mat-table admin-table">
+                        <div class="mat-header-row">
+                            <div class="mat-header-cell" style="width: 500px;">Product</div>
+                            <div class="mat-header-cell">MRP</div>
+                            <div class="mat-header-cell">Received Qty.</div>
+                            <div class="mat-header-cell">Total</div>
+                            <div class="mat-header-cell">Return Qty.</div>
+                        </div>
+                        <div *ngFor="let item of purchaseItems" class="mat-row">
+                            <div class="mat-cell">{{item.categoryName}} | {{item.productName}} |
+                                {{item.materialTypeName}} | {{item.sizeName}} | {{item.brandName}} | {{item.gradeName}}
+                                | {{item.colorName}}</div>
+                            <div class="mat-cell">{{item?.purchase?.purchasedCost}}</div>
+                            <div class="mat-cell">{{item?.purchase?.receivedQty}}</div>
+                            <div class="mat-cell">{{item?.purchase?.subTotal | number : '1.2-2'}}</div>
+                            <div class="mat-cell">
+                                <mat-form-field appearance="outline" class="w-100">
+                                    <input type="number" placeholder="0" min="1"
+                                        (input)="validateRejectedQty($event.target.value,item.purchase.receivedQty)"
+                                        [max]="item.purchase.receivedQty" [(ngModel)]="item.purchase.rejectedQty"
+                                        [ngModelOptions]="{standalone: true}" matInput>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+                </mat-card-content>
+                <div fxLayout="row wrap">
+                    <div fxFlex="100" class="px-2">
+                        <div fxLayout="row wrap">
+                            <div fxFlex="100" fxFlex.gt-sm="25" class="px-1">
+                                <mat-form-field appearance="outline" class="w-100">
+                                    <mat-label>Return date</mat-label>
+                                    <input matInput [matDatepicker]="returnDate" readonly placeholder="Purchase Date"
+                                        formControlName="returnDate">
+                                    <mat-datepicker-toggle matSuffix [for]="returnDate"></mat-datepicker-toggle>
+                                    <mat-datepicker #returnDate></mat-datepicker>
+                                    <mat-error *ngIf="form.controls.returnDate.errors?.required">
+                                        Return date is required
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div fxFlex="100" fxFlex.gt-sm="25" class="px-1">
+                                <mat-form-field appearance="outline" class="w-100">
+                                    <mat-label>Sub Total</mat-label>
+                                    <input type="number" placeholder="0" readonly matInput formControlName="totalAmount">
+                                    <mat-error *ngIf="form.controls.totalAmount.errors?.required">
+                                        Sub Total is required
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>                            
+                            <div fxFlex="100" fxFlex.gt-sm="25" class="px-1">
+                                <mat-form-field appearance="outline" class="w-100">
+                                    <mat-label>Grand Total</mat-label>
+                                    <input type="number" placeholder="0" (keyup)="updateRoundOff()" matInput formControlName="grandTotal">
+                                    <mat-error *ngIf="form.controls.grandTotal.errors?.required">
+                                        Grand Total is required
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div fxFlex="100" fxFlex.gt-sm="25" class="px-1">
+                                <mat-form-field appearance="outline" class="w-100">
+                                    <mat-label>Round Off</mat-label>
+                                    <input type="number" placeholder="0" matInput formControlName="roundOff" readonly>
+                                </mat-form-field>
+                            </div>
+                            <div fxFlex="100" fxFlex.gt-sm="100" class="px-1">
+                                <mat-form-field appearance="outline" class="w-100">
+                                    <mat-label>Remarks</mat-label>
+                                    <input matInput formControlName="remarks" placeholder="Enter remarks">
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <mat-card-footer>
+                    <div fxLayout="row wrap" fxLayoutAlign="space-between center" class="w-100 p-2">
+                        <button mat-raised-button color="warn" type="button" mat-dialog-close>Cancel</button>
+                        <button mat-raised-button color="primary" type="button" (click)="onReturnSave()">Save</button>
+                    </div>
+                </mat-card-footer>
+            </mat-card>
+        </mat-dialog-content>
+    </div>
+</form>

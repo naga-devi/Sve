@@ -47,7 +47,7 @@ namespace Sve.WebHost.Controllers
                     x.GrandTotal,
                     x.CreatedBy,
                     CreatedOn = x.CreatedOn.ToDDMMYYY(),
-                    Quantity = x.PurchaseOrderDetail.Sum(m => m.Quanitity),
+                    StockedQty = x.PurchaseOrderDetail.Sum(m => m.StockedQty),
                     x.VendorId,
                     x.Vendor.PhoneNo,
                     x.Vendor.CompanyName
@@ -103,7 +103,7 @@ namespace Sve.WebHost.Controllers
                     p.StockGroup.BrandId,
                     p.StockGroup.ColorId,
                     p.StockGroup.GradeId,
-                    p.Quanitity,
+                    p.ReceivedQty,
                     p.UnitPrice,
                     p.Discount,
                     p.CgstAmount,
@@ -112,8 +112,8 @@ namespace Sve.WebHost.Controllers
                     p.Mrp,
                     p.UnitMeasureId,
 
-                    totalCgstAmount = Math.Round((decimal)(p.Quanitity * p.CgstAmount), 2),
-                    totalSgstAmount = Math.Round((decimal)(p.Quanitity * p.SgstAmount), 2),
+                    totalCgstAmount = Math.Round((decimal)(p.ReceivedQty * p.CgstAmount), 2),
+                    totalSgstAmount = Math.Round((decimal)(p.ReceivedQty * p.SgstAmount), 2),
                     taxableAmount = GetTaxableAmount(p),
                 }).ToList()
             });
@@ -146,7 +146,7 @@ namespace Sve.WebHost.Controllers
                 }
             }
 
-            return Math.Round((decimal)(subtotal * purchase.Quanitity), 2);
+            return Math.Round((decimal)(subtotal * purchase.ReceivedQty), 2);
         }
     }
 }

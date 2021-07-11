@@ -38,7 +38,7 @@
                 <div class="mat-cell">{{order?.companyName}}</div>
                 <div class="mat-cell">{{order?.phoneNo}}</div>
                 <div class="mat-cell">{{order.purchaseDate}}</div>
-                <div class="mat-cell"><strong>₹{{order.grandTotal}}</strong> for <strong>{{order.quantity}}</strong> items</div>
+                <div class="mat-cell"><strong>₹{{order.grandTotal}}</strong> for <strong>{{order.stockedQty}}</strong> items</div>
                 <div class="mat-cell">
                     <div class="p-1 actions">
                         <button mat-icon-button [matMenuTriggerFor]="menu" matTooltip="More actions">
@@ -52,6 +52,14 @@
                             <button mat-menu-item type="button" (click)="edit(order)">
                                 <mat-icon>edit</mat-icon>
                                 <span>Edit</span>
+                            </button>
+                            <button mat-menu-item type="button" (click)="returnOrder(order)">
+                                <mat-icon>history</mat-icon>
+                                <span>Return</span>
+                            </button>
+                            <button mat-menu-item type="button" (click)="issueCreditNote(order)">
+                                <mat-icon>payment</mat-icon>
+                                <span>Credit Note</span>
                             </button>
                             <button mat-menu-item type="button" (click)="deleteOrder(order)">
                                 <mat-icon>delete</mat-icon>

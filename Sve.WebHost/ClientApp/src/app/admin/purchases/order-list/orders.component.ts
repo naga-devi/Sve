@@ -8,6 +8,8 @@ import { environment } from "../../../../environments/environment";
 import { PurchaseDetailsListDialogComponent } from "../order-details-list-dialog/order-details-dialog";
 import { UploadDownloadService } from "../../../jx-core";
 import { Router } from "@angular/router";
+import { PurchaseReturnsEditDialogComponent } from "../returns/edit-dialog";
+import { CreditNoteWithOrderEditDialogComponent } from "../credit-notes/edit-dialog";
 
 @Component({
   selector: "app-orders",
@@ -78,6 +80,40 @@ export class PurchaseOrdersComponent implements OnInit {
 
   public openOrderDetailsDialog(data: any) {
     const dialogRef = this.dialog.open(PurchaseDetailsListDialogComponent, {
+      data: {
+        order: data,
+        //stores: this.stores,
+        //countries: this.countries
+      },
+      panelClass: ["theme-dialog"],
+      autoFocus: false,
+      direction: this.settings.rtl ? "rtl" : "ltr",
+      width: "80%",
+    });
+    dialogRef.afterClosed().subscribe((order) => {
+      return;
+    });
+  }
+
+  public returnOrder(data: any) {
+    const dialogRef = this.dialog.open(PurchaseReturnsEditDialogComponent, {
+      data: {
+        order: data,
+        //stores: this.stores,
+        //countries: this.countries
+      },
+      panelClass: ["theme-dialog"],
+      autoFocus: false,
+      direction: this.settings.rtl ? "rtl" : "ltr",
+      width: "80%",
+    });
+    dialogRef.afterClosed().subscribe((order) => {
+      return;
+    });
+  }
+
+  public issueCreditNote(data: any) {
+    const dialogRef = this.dialog.open(CreditNoteWithOrderEditDialogComponent, {
       data: {
         order: data,
         //stores: this.stores,

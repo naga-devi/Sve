@@ -3,7 +3,7 @@
     <div mat-dialog-content>
         <div fxLayout="row wrap" class="mt-2">
             <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
-                <!-- <mat-form-field appearance="outline" class="w-100">
+                <mat-form-field appearance="outline" class="w-100">
                     <mat-label>Category</mat-label>
                     <mat-select formControlName="categoryId" required>
                         <mat-option *ngFor="let cat of data.prerequisites.categories" [value]="cat.id">
@@ -11,8 +11,8 @@
                         </mat-option>
                     </mat-select>
                     <mat-error *ngIf="form.controls.categoryId.errors?.required">Category is required</mat-error>
-                </mat-form-field> -->
-                <kt-jx-mat-select [label]="'Category'"  [valueField]="'id'" [textField]="'name'" [dataSource]="data.prerequisites.categories" [control]="form.get('categoryId')" [loadOnInit]="false"></kt-jx-mat-select>
+                </mat-form-field>
+                <!-- <kt-jx-mat-select [label]="'Category'"  [valueField]="'id'" [textField]="'name'" [dataSource]="data.prerequisites.categories" [control]="form.get('categoryId')" [loadOnInit]="false"></kt-jx-mat-select> -->
             </div>
             <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
                 <mat-form-field appearance="outline" class="w-100">
@@ -118,8 +118,8 @@
             <div fxFlex="100" fxFlex.gt-sm="20" class="px-1">
                 <mat-form-field appearance="outline" class="w-100">
                     <mat-label>Quantity</mat-label>
-                    <input matInput formControlName="quanitity" type="number">
-                    <mat-error *ngIf="form.controls.quanitity.errors?.required">Quantity is required</mat-error>
+                    <input matInput formControlName="receivedQty" type="number">
+                    <mat-error *ngIf="form.controls.receivedQty.errors?.required">Quantity is required</mat-error>
                 </mat-form-field>
             </div>
             <div fxFlex="100" fxFlex.gt-sm="20" class="px-1">

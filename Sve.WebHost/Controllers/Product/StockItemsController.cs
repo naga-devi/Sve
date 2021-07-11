@@ -60,7 +60,7 @@ namespace Sve.WebHost.Controllers
                     x.Mrp,
                     x.Discount,
                     x.SellPrice,
-                    StockedQty = x.PurchaseOrderDetails.Sum(t => t.Quanitity),
+                    StockedQty = x.PurchaseOrderDetails.Sum(t => t.StockedQty),
                     TaxSlab = new
                     {
                         x.Product.TaxSlab.Sgst,

@@ -42,7 +42,7 @@
         /// Purchase details id
         /// </summary>
         public int? Id { get; set; }
-        public int? ProductId { get; set; }
+        public int ProductId { get; set; }
         public int? StockGroupId { get; set; }
         public int MaterialTypeId { get; set; }
         public int SizeId { get; set; }
@@ -55,7 +55,8 @@
 
         public int UnitMeasureId { get; set; }
         public int? CategoryId { get; set; }
-        public int Quanitity { get; set; }
+        public short ReceivedQty { get; set; }
+        public short RejectedQty { get; set; } = 0;
         public decimal CgstAmount { get; set; }
         public decimal SgstAmount { get; set; }
         public decimal TotalAmount { get; set; }

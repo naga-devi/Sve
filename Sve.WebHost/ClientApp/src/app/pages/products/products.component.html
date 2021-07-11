@@ -10,8 +10,8 @@
                     </mat-panel-title>
                 </mat-expansion-panel-header>
                 <div class="categories-wrapper categories-dropdown" perfectScrollbar>
-                    <app-category-list [categories]="categories" *ngIf="categories && categories.length > 0" [categoryParentId]="0"
-                                       (change)="onChangeCategory($event)"></app-category-list>
+                    <app-category-list [categories]="categories" *ngIf="categories && categories.length > 0"
+                        [categoryParentId]="0" (change)="onChangeCategory($event)"></app-category-list>
                 </div>
             </mat-expansion-panel>
 
@@ -28,9 +28,9 @@
                 </div>
                 <div fxLayout="row" fxLayoutAlign="space-between center" class="filter-price">
                     <mat-slider color="primary" max="50000" min="1" (change)="onStartPriceChange($event)"
-                                thumb-label="true" [(ngModel)]="priceFrom"></mat-slider>
+                        thumb-label="true" [(ngModel)]="priceFrom"></mat-slider>
                     <mat-slider color="warn" max="50000" min="1" (change)="onEndPriceChange($event)" thumb-label="true"
-                                [(ngModel)]="priceTo"></mat-slider>
+                        [(ngModel)]="priceTo"></mat-slider>
                 </div>
             </mat-expansion-panel>
 
@@ -42,7 +42,7 @@
                 </mat-expansion-panel-header>
                 <div fxLayout="row wrap" fxLayoutAlign="space-between center" class="filter-buttons">
                     <button mat-raised-button *ngFor="let brand of brands"
-                            (click)="brand.selected = !brand.selected; brandChanged()" [class.selected]="brand.selected">
+                        (click)="brand.selected = !brand.selected; brandChanged()" [class.selected]="brand.selected">
                         {{brand.name}}
                     </button>
                 </div>
@@ -56,7 +56,7 @@
                 </mat-expansion-panel-header>
                 <div fxLayout="row wrap" fxLayoutAlign="space-between center" class="filter-buttons">
                     <button mat-raised-button *ngFor="let type of materialTypes"
-                            (click)="type.selected = !type.selected; materialChanged()" [class.selected]="type.selected">
+                        (click)="type.selected = !type.selected; materialChanged()" [class.selected]="type.selected">
                         {{type.name}}
                     </button>
                 </div>
@@ -70,7 +70,7 @@
                 </mat-expansion-panel-header>
                 <div fxLayout="row wrap" fxLayoutAlign="space-between center" class="filter-buttons">
                     <button mat-raised-button *ngFor="let size of sizes"
-                            (click)="size.selected = !size.selected; sizeChanged()" [class.selected]="size.selected">
+                        (click)="size.selected = !size.selected; sizeChanged()" [class.selected]="size.selected">
                         {{size.name}}
                     </button>
                 </div>
@@ -84,7 +84,7 @@
                 </mat-expansion-panel-header>
                 <div fxLayout="row wrap" fxLayoutAlign="space-between center" class="filter-buttons">
                     <button mat-raised-button *ngFor="let item of grades"
-                            (click)="item.selected = !item.selected; gradeChanged()" [class.selected]="item.selected">
+                        (click)="item.selected = !item.selected; gradeChanged()" [class.selected]="item.selected">
                         {{item.name}}
                     </button>
                 </div>
@@ -97,7 +97,8 @@
                     </mat-panel-title>
                 </mat-expansion-panel-header>
                 <div fxLayout="row wrap" fxLayoutAlign="space-between center" class="filter-buttons">
-                    <button mat-raised-button *ngFor="let color of colors" [style.background]="color.name" (click)="color.selected = !color.selected; colorChanged()">
+                    <button mat-raised-button *ngFor="let color of colors" [style.background]="color.name"
+                        (click)="color.selected = !color.selected; colorChanged()">
                         <span *ngIf="!color.selected">&nbsp;</span>
                         <mat-icon *ngIf="color.selected">check</mat-icon>
                     </button>
@@ -160,7 +161,8 @@
                     Sorry, items are not unavailable. Please choose a different one.
                 </div>
             </div>
-            <div *ngFor="let product of products  | paginate: { itemsPerPage: 12, currentPage: page, totalItems: totalItems }" fxFlex="100" [fxFlex.gt-sm]="viewCol" fxFlex.sm="50" class="col">
+            <div *ngFor="let product of products  | paginate: { itemsPerPage: 12, currentPage: page, totalItems: totalItems }"
+                fxFlex="100" [fxFlex.gt-sm]="viewCol" fxFlex.sm="50" class="col">
                 <mat-card class="product-item text-center">
                     <mat-chip-list *ngIf="product.discount">
                         <mat-chip color="warn" selected="true">{{product.discount}}% OFF</mat-chip>
@@ -178,10 +180,12 @@
                     <div fxLayout="row" fxLayoutAlign="space-between center" class="prices">
                         <div fxLayout="column" fxLayoutAlign="center start">
                             <p class="old-price text-muted"><span
-                                    *ngIf="product.oldPrice && product.availibilityCount > 0">₹{{product.oldPrice | number : '1.2-2'}}</span>
+                                    *ngIf="product.oldPrice && product.availibilityCount > 0">₹{{product.oldPrice |
+                                    number : '1.2-2'}}</span>
                             </p>
                             <p class="new-price"><span *ngIf="product.availibilityCount == 0">No Stock</span><span
-                                    *ngIf="product.availibilityCount > 0">₹{{product.newPrice | number : '1.2-2'}}</span>
+                                    *ngIf="product.availibilityCount > 0">₹{{product.newPrice | number :
+                                    '1.2-2'}}</span>
                             </p>
                         </div>
                         <app-rating [ratingsCount]="product.ratingsCount" [ratingsValue]="product.ratingsValue"
@@ -201,7 +205,7 @@
                     Sorry, items are not unavailable. Please choose a different one.
                 </div>
             </div>
-            <div *ngFor="let product of products | paginate: { itemsPerPage: count, currentPage: page }" fxFlex="100"
+            <div *ngFor="let product of products | paginate: { itemsPerPage: count, currentPage: page, totalItems: totalItems }" fxFlex="100"
                 class="col">
                 <mat-card class="product-item">
                     <div fxLayout="row wrap">
@@ -224,11 +228,13 @@
                             <div fxLayout="row" fxLayoutAlign="space-between center" class="prices">
                                 <div fxLayout="column" fxLayoutAlign="center start">
                                     <p class="old-price text-muted"><span *ngIf="product.oldPrice"><span
-                                                *ngIf="product.availibilityCount > 0">₹</span>{{product.oldPrice | number : '1.2-2'}}</span>
+                                                *ngIf="product.availibilityCount > 0">₹</span>{{product.oldPrice |
+                                            number : '1.2-2'}}</span>
                                     </p>
                                     <p class="new-price"><span *ngIf="product.availibilityCount == 0">No
                                             Stock</span><span
-                                            *ngIf="product.availibilityCount > 0">₹</span>{{product.newPrice | number : '1.2-2'}}
+                                            *ngIf="product.availibilityCount > 0">₹</span>{{product.newPrice | number :
+                                        '1.2-2'}}
                                     </p>
                                 </div>
                                 <app-rating [ratingsCount]="product.ratingsCount" [ratingsValue]="product.ratingsValue"

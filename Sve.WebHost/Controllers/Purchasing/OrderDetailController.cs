@@ -45,16 +45,20 @@ namespace Sve.WebHost.Controllers
                 ColorName = x.Color.Name,
                 Purchase = x.PurchaseOrderDetails.Select(p => new
                 {
-                    p.Quanitity,
+                    p.Id,
+                    p.ReceivedQty,
+                    p.RejectedQty,
+                    p.StockedQty,
                     p.UnitPrice,
                     p.Discount,
                     p.UnitMeasureId,
-                    UnitMeasure =p.UnitMeasure.Name,
+                    UnitMeasure = p.UnitMeasure.Name,
                     p.CgstAmount,
                     p.SgstAmount,
                     p.IgstAmount,
                     p.Mrp,
-                    SubTotal = Math.Round((decimal)(p.Quanitity * (p.UnitPrice + p.CgstAmount + p.SgstAmount)), 2)
+                    purchasedCost = Math.Round((p.UnitPrice + p.CgstAmount + p.SgstAmount + p.IgstAmount), 2),
+                    SubTotal = Math.Round(p.ReceivedQty * (p.UnitPrice + p.CgstAmount + p.SgstAmount), 2)
                 }).FirstOrDefault()
             })?.ToList());
         }
