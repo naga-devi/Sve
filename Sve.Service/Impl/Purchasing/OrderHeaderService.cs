@@ -162,16 +162,18 @@ namespace Sve.Service.Impl.Purchasing
                         BrandId = x.BrandId,
                         ProductId = x.ProductId,
                         MaterialTypeId = x.MaterialTypeId,
-                        Product = new Contract.Models.Product.ProductDetails
-                        {
-                            TaxSlabId = x.Product.TaxSlabId,
-                            TaxSlab = new Contract.Models.Product.TaxSlabs
-                            {
-                                TotalTax = x.Product.TaxSlab.TotalTax,
-                                Sgst = x.Product.TaxSlab.Sgst,
-                                Cgst = x.Product.TaxSlab.Cgst,
-                            }
-                        }
+                        ColorId = x.ColorId,
+                        GradeId = x.GradeId
+                        //Product = new Contract.Models.Product.ProductDetails
+                        //{
+                        //    TaxSlabId = x.Product.TaxSlabId,
+                        //    TaxSlab = new Contract.Models.Product.TaxSlabs
+                        //    {
+                        //        TotalTax = x.Product.TaxSlab.TotalTax,
+                        //        Sgst = x.Product.TaxSlab.Sgst,
+                        //        Cgst = x.Product.TaxSlab.Cgst,
+                        //    }
+                        //}
                     })
                     .ToListAsync(cancellationToken: cancellationToken);
 
@@ -182,7 +184,7 @@ namespace Sve.Service.Impl.Purchasing
                     {
                         x.StockGroupId = existingStockItems
                         .FirstOrDefault(m => x.ProductId == m.ProductId && x.MaterialTypeId == m.MaterialTypeId
-                            && x.SizeId == m.SizeId && x.BrandId == m.BrandId && x.GradeId == m.GradeId && x.ColorId == m.ColorId)?.StockGroupId ?? 0;
+                            && x.SizeId == m.SizeId && x.BrandId == m.BrandId && x.GradeId == m.GradeId/* && x.ColorId == m.ColorId*/)?.StockGroupId ?? 0;
                     });
                 }
 
@@ -253,8 +255,13 @@ namespace Sve.Service.Impl.Purchasing
                     {
                         if (stocksToAdd.HasItems())
                         {
-                            dbContext.AddRange(stocksToAdd.Where(x => x.StockGroupId == 0).ToList().ToArray());
-                            await dbContext.SaveChangesAsync(cancellationToken);
+                            var stocksToAddModel = stocksToAdd.Where(x => x.StockGroupId == 0).ToList();
+
+                            if (stocksToAddModel.HasItems())
+                            {
+                                dbContext.AddRange(stocksToAddModel.ToArray());
+                                await dbContext.SaveChangesAsync(cancellationToken);
+                            }
                         }
                     }
 
@@ -297,7 +304,7 @@ namespace Sve.Service.Impl.Purchasing
                         var purchases = request.Purchases.Select(x => new Domain.PurchaseOrderDetail
                         {
                             PurchaseOrderId = purchaseOrderHeaderToAdd.PurchaseOrderId,
-                            StockGroupId = (int)stocksToAdd.FirstOrDefault(m => x.ProductId == m.ProductId && x.MaterialTypeId == m.MaterialTypeId && x.SizeId == m.SizeId && x.BrandId == m.BrandId)?.StockGroupId,
+                            StockGroupId = (int)stocksToAdd.FirstOrDefault(m => x.ProductId == m.ProductId && x.MaterialTypeId == m.MaterialTypeId && x.SizeId == m.SizeId && x.BrandId == m.BrandId && x.GradeId == m.GradeId)?.StockGroupId,
                             ReceivedQty = x.ReceivedQty,
                             Mrp = x.Mrp,
                             UnitPrice = x.UnitPrice,
@@ -337,10 +344,19 @@ namespace Sve.Service.Impl.Purchasing
 
             try
             {
+                //set default values
+
+                request?.Purchases?.ForEach(x =>
+                {
+                    x.Id = x.Id == null ? 0 : x.Id;
+                    x.StockGroupId = x.StockGroupId == null ? 0 : x.StockGroupId;
+                });
+
                 using var dbContext = _dbContext();
                 using var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
                 var existingDetails = await dbContext.GetAsQuerable<Domain.PurchaseOrderDetail>().Where(x => x.PurchaseOrderId == request.Vendor.PurchaseOrderId).ToListAsync(cancellationToken: cancellationToken);
                 var deleteIds = Array.Empty<int>();
+
                 if (existingDetails != null && existingDetails.Any())
                 {
                     var detailsToDeleted = existingDetails.Where(e => !request.Purchases.Any(n => n.Id == e.Id)).ToList();
@@ -353,9 +369,10 @@ namespace Sve.Service.Impl.Purchasing
                 }
 
                 //get existing stock items
-                if (request.Purchases != null && request.Purchases.Any(x => x.Id == 0))
+                if (request.Purchases != null && request.Purchases.Any(x => x.Id == 0 || x.StockGroupId == 0))
                 {
-                    var searchProductIds = request.Purchases.Where(x => x.Id == 0).Select(x => x.ProductId).ToList();
+                    var searchProductIds = request.Purchases.Where(x => x.Id == 0 || x.StockGroupId == 0).Select(x => x.ProductId).ToList();
+
                     var existingStockItems = await dbContext.GetAsQuerable<ProductDomain.StockGroups>()
                         .Where(x => searchProductIds.Contains(x.ProductId))
                         .AsNoTracking()
@@ -366,29 +383,36 @@ namespace Sve.Service.Impl.Purchasing
                             BrandId = x.BrandId,
                             ProductId = x.ProductId,
                             MaterialTypeId = x.MaterialTypeId,
-                            Product = new Contract.Models.Product.ProductDetails
-                            {
-                                TaxSlabId = x.Product.TaxSlabId,
-                                TaxSlab = new Contract.Models.Product.TaxSlabs
-                                {
-                                    TotalTax = x.Product.TaxSlab.TotalTax,
-                                    Sgst = x.Product.TaxSlab.Sgst,
-                                    Cgst = x.Product.TaxSlab.Cgst,
-                                }
-                            }
+                            ColorId = x.ColorId,
+                            GradeId = x.GradeId
+
+
+                            //Product = new Contract.Models.Product.ProductDetails
+                            //{
+                            //    TaxSlabId = x.Product.TaxSlabId,
+                            //    TaxSlab = new Contract.Models.Product.TaxSlabs
+                            //    {
+                            //        TotalTax = x.Product.TaxSlab.TotalTax,
+                            //        Sgst = x.Product.TaxSlab.Sgst,
+                            //        Cgst = x.Product.TaxSlab.Cgst,
+                            //    }
+                            //}
                         })
                         .ToListAsync(cancellationToken: cancellationToken);
 
                     // set StockGroupId
-                    if (request.Purchases.HasItems() && request.Purchases.Any(x => x.Id == 0))
+
+                    request.Purchases.Where(x => x.Id == 0 || x.StockGroupId == 0).ToList().ForEach(x =>
                     {
-                        request.Purchases.Where(x => x.Id == 0).ToList().ForEach(x =>
+                        var stockGroupId = existingStockItems
+                        .FirstOrDefault(m => x.ProductId == m.ProductId && x.MaterialTypeId == m.MaterialTypeId
+                            && x.SizeId == m.SizeId && x.BrandId == m.BrandId && x.GradeId == m.GradeId)?.StockGroupId ?? 0;
+
+                        if (stockGroupId > 0)
                         {
-                            x.StockGroupId = existingStockItems
-                            .FirstOrDefault(m => x.ProductId == m.ProductId && x.MaterialTypeId == m.MaterialTypeId
-                                && x.SizeId == m.SizeId && x.BrandId == m.BrandId && x.GradeId == m.GradeId && x.ColorId == m.ColorId)?.StockGroupId ?? 0;
-                        });
-                    }
+                            x.StockGroupId = stockGroupId;
+                        }
+                    });
                 }
 
                 //create vendor if not exists
@@ -413,7 +437,7 @@ namespace Sve.Service.Impl.Purchasing
                 //create  purchase header
                 if (request.Vendor.VendorId > 0)
                 {
-                    var stocksToAdd = request.Purchases.Where(x => x.Id == 0).Select(x => new ProductDomain.StockGroups
+                    var stocksToAdd = request.Purchases.Where(x => x.Id == 0 || x.StockGroupId == 0).Select(x => new ProductDomain.StockGroups
                     {
                         ProductId = x.ProductId,
                         StockGroupId = (int)x.StockGroupId,
@@ -444,7 +468,7 @@ namespace Sve.Service.Impl.Purchasing
                         var stockToAddModel = stocksToAdd.Where(x => x.StockGroupId == 0).ToList().ToArray();
                         if (stockToAddModel.HasItems())
                         {
-                            dbContext.AddRange();
+                            dbContext.AddRange(stockToAddModel);
                             await dbContext.SaveChangesAsync(cancellationToken);
                         }
                     }
@@ -477,7 +501,8 @@ namespace Sve.Service.Impl.Purchasing
                         var detailsToAdd = request.Purchases.Where(x => x.Id == 0).Select(x => new Domain.PurchaseOrderDetail
                         {
                             PurchaseOrderId = orderToUpdate.PurchaseOrderId,
-                            StockGroupId = (int)stocksToAdd.FirstOrDefault(m => x.ProductId == m.ProductId && x.MaterialTypeId == m.MaterialTypeId && x.SizeId == m.SizeId && x.BrandId == m.BrandId)?.StockGroupId,
+                            StockGroupId = (int)stocksToAdd.FirstOrDefault(m => x.ProductId == m.ProductId && x.BrandId == m.BrandId && x.MaterialTypeId == m.MaterialTypeId && x.SizeId == m.SizeId
+                             && x.GradeId == m.GradeId)?.StockGroupId,
                             ReceivedQty = x.ReceivedQty,
                             Mrp = x.Mrp,
                             UnitPrice = x.UnitPrice,
